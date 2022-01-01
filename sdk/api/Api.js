@@ -41,19 +41,21 @@ class Api {
     // TODO: make it easier to add params (maybe)
     async createConversationFromAudio(audio, streamLength = 0, params = {}) {
         const { conversationId, jobId } = await this.createConversationFromData(audio, "process/audio", "process/audio/url", "POST", streamLength, params)
-        return new Conversation(conversationId, [ new Job(jobId, this.client) ], this.client)
+        return new Conversation(conversationId, this.client, [ new Job(jobId, this.client) ])
     }
 
     async createConversationFromVideo(video, streamLength = 0, params = {}) {
         const { conversationId, jobId } = await this.createConversationFromData(video, "process/video", "process/video/url", "POST", streamLength, params)
-        return new Conversation(conversationId, [ new Job(jobId, this.client) ], this.client)
+        return new Conversation(conversationId, this.client, [ new Job(jobId) ])
     }
 
     async createConversationFromData(data, endpoint, urlEndpoint, method, streamLength = 0, params = {}) {
-        // if we're given a string it's probably a url
         let res = null
+        // if we're given a string it's probably a url
         if (typeof data === "string") {
-            res = await this.endpoint(urlEndpoint, method, data, params, null)
+            if (!params.url)
+                params.url = data
+            res = await this.endpoint(urlEndpoint, method, JSON.stringify(params), null, {"Content-Type": "application/json"})
         } else {
             const headers = {
                 "Content-Length": streamLength

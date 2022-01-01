@@ -11,14 +11,12 @@ const test = async () => {
     const client = new Client()
     await client.init(clientOptions)
     
-    const stats = fs.statSync("test audio.mp3")
-    let stream = fs.createReadStream("test audio.mp3")
-    const conversation = await client.api.createConversationFromAudio(stream, stats.size)
+    const conversation = await client.api.createConversationFromAudio("https://symbltestdata.s3.us-east-2.amazonaws.com/sample_audio_file.wav")
     console.log(conversation.conversationId)
 
     function wait() {
         setTimeout(async () => {
-            const { status } = await conversation.fetchJobStatus()
+            const { status } = await (conversation.jobs[conversation.jobs.length - 1]).fetchStatus()
             console.log(status)
             if (status != "completed")
                 wait()
