@@ -19,7 +19,7 @@ const TranscriptPage = (props) => {
                     "timestamp": "0:25"
                 },
                 {
-                    "text": "blah blah blah",
+                    "text": "blah blah blahaaa aaaaaa aaaaa aaaaaa aaa aaaaa aaaaa aaas ahh ahhh haa haa haa haaa ",
                     "timestamp": "0:50"
                 },
                 {
