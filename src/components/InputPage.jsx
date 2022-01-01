@@ -1,7 +1,7 @@
 
 const InputPage = () => {
     return (
-        <div>
+        <div className="bg-secondary">
             <a href="https://logo.com/">
             <img src="https://cdn.logo.com/hotlink-ok/logo-social.png" title="lecture organizer" width="200px" height="100px" />
             </a>

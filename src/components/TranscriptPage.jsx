@@ -1,5 +1,6 @@
 import AppHeader from './AppHeader'
 import { Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TranscriptSection from './templates/TranscriptSection';
 import TopicsSection from './templates/TopicsSection';
 import Buffer from './Buffer';
@@ -81,7 +82,7 @@ const TranscriptPage = (props) => {
             <AppHeader></AppHeader>
             <div className="interface d-flex flex-column ">
                 <div className="playbar vw-75 py-5">
-                    <audio id="audioplayer" src="" currentTime={currentTimestamp} controls autoplay >
+                    <audio id="audioplayer" className="w-75" src="" currentTime={currentTimestamp} controls autoplay >
                     </audio>
                     Current timestamp is {currentTimestamp}
                 </div>
