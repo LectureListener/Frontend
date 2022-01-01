@@ -27,7 +27,7 @@ class Conversation {
         return await this.client.api.endpoint(this.endpointUrl + "messages", "GET", null, params)
     }
     
-    async fetchSpeechToText(params = { parentRefs: true }) {
+    async fetchTopics(params = { parentRefs: true }) {
         return await this.client.api.endpoint(this.endpointUrl + "topics", "GET", null, params)
     }
 

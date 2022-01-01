@@ -1,18 +1,22 @@
+const DateFormatter = require("../utils/DateFormatter")
+
 const maxMessageLength = 10
 
 class MessageConverter {
-    constructor(messages) {
+    constructor() {
         // convert from the api's messages to something our website can use
         this.messages = []
+    }
 
+    convert(messages) {
         if (!messages)
             return
 
-        const clipStartTime = new Date(messages.messages[0].startTime)
+        const clipStartTime = new Date(messages[0].startTime)
 
         let currentMessageLength = 0
         let currentMessage = { message: [] }
-        messages.messages.forEach(apiMessage => {
+        messages.forEach(apiMessage => {
             const messageStart = new Date(apiMessage.startTime)
             const messageEnd = new Date(apiMessage.endTime)
 
@@ -21,14 +25,8 @@ class MessageConverter {
 
             currentMessageLength += messageLength
 
-            let currentLineTimestamp = ""
             const currentMessageStart = new Date(messageStart - clipStartTime)
-
-            // If it lasts into the hours
-            if (currentMessageStart.getUTCHours())
-                currentLineTimestamp = `${currentMessageStart.getUTCHours().toString().padStart(2, "0")}:${currentMessageStart.getUTCMinutes().toString().padStart(2, "0")}:${currentMessageStart.getUTCSeconds().toString().padStart(2, "0")}`
-            else
-                currentLineTimestamp = `${currentMessageStart.getUTCMinutes().toString().padStart(2, "0")}:${currentMessageStart.getUTCSeconds().toString().padStart(2, "0")}`
+            const currentLineTimestamp = DateFormatter.toMinutesAndHours(currentMessageStart)
     
             if (!currentMessage.timestamp) 
                 currentMessage.timestamp = currentLineTimestamp
@@ -46,10 +44,6 @@ class MessageConverter {
                 currentMessageLength = 0
             }
         });
-
-        this.messages.forEach(message => {
-            console.log(message)
-        })
     }
 }
 
