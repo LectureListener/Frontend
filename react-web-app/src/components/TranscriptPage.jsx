@@ -45,20 +45,20 @@ const TranscriptPage = () => {
                     </div>
                     <div className="topics w-25 mt-0 p-4 overflow-scroll">
                         <h2>Topics and Questions</h2>
-                        <div className="timestamped-topic">
-                            <h3 className="timestamp">2:30</h3>
+                        <div className="timestamped-topic d-flex mb-2">
+                            <time className="timestamp fw-bold me-3">2:30</time>
                             <div className="description">
                                 Topic: Structural Engineering
                             </div>
                         </div>
-                        <div className="timestamped-topic">
-                            <h3 className="timestamp">2:30</h3>
+                        <div className="timestamped-topic d-flex mb-2">
+                            <time className="timestamp fw-bold me-3">2:30</time>
                             <div className="description">
                                 Topic: Structural Engineering
                             </div>
                         </div>
-                        <div className="timestamped-topic">
-                            <h3 className="timestamp">2:30</h3>
+                        <div className="timestamped-topic d-flex mb-2">
+                            <time className="timestamp fw-bold me-3">2:30</time>
                             <div className="description">
                                 Topic: Structural Engineering
                             </div>
