@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const AppHeader = () => {
     return (
-        <div id="header" className="header d-flex vw-100 jus">
+        <div id="header" className="header d-flex vw-100">
             <Link to="/menu">
                 <button class="btn menu-button bg-secondary text-white">Menu</button>
             </Link>
