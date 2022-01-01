@@ -13,7 +13,7 @@ function App() {
           <Routes>
             <Route path="/" element={<InputPage /> }/>
             <Route path="/transcript" element={<TranscriptPage /> }/>
-            <Route path="/menu" element={ "I guess this is a Menu" }/>
+            <Route path="/menu" element={ <Buffer /> }/>
             <Route path="/buffer" element={ <Buffer /> }/>
           </Routes>
         </BrowserRouter>

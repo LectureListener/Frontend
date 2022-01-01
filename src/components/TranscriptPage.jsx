@@ -2,6 +2,7 @@ import AppHeader from './AppHeader'
 import { Link } from "react-router-dom";
 import TranscriptSection from './templates/TranscriptSection';
 import TopicsSection from './templates/TopicsSection';
+import Buffer from './Buffer';
 import { useState } from 'react';
 
 const TranscriptPage = (props) => {
