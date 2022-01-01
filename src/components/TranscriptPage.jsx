@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import TranscriptSection from './templates/TranscriptSection';
 import TopicsSection from './templates/TopicsSection';
 import Buffer from './Buffer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const TranscriptPage = (props) => {
 
@@ -68,15 +68,20 @@ const TranscriptPage = (props) => {
     const [currentTimestamp, setTimestamp] = useState(0);
     
     const skipAudio = (timestamp) => {
-        setTimestamp(timestamp);
+        setTimestamp(parseInt(timestamp.split(':')[0] * 60) + parseInt(timestamp.split(':')[1]));
     }
+
+    useEffect(() => {
+        document.getElementById("audioplayer").currentTime = currentTimestamp;
+    }, [currentTimestamp]);
+
 
     return (
         <div className="container-fluid vw-100">
             <AppHeader></AppHeader>
             <div className="interface d-flex flex-column ">
                 <div className="playbar vw-75 py-5">
-                    <audio controls src="./sample-audio.mp3" type="audio/mp3">
+                    <audio id="audioplayer" src="" currentTime={currentTimestamp} controls autoplay >
                     </audio>
                     Current timestamp is {currentTimestamp}
                 </div>
