@@ -70,7 +70,7 @@ class Api {
         return await this.endpoint("conversations", "GET", null, params)
     }
 
-    createConversationFromId(conversationId) {
+    getConversationFromId(conversationId) {
         return new Conversation(conversationId, this.client)
     }
 }
