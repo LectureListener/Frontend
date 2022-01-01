@@ -1,68 +1,103 @@
 import AppHeader from './AppHeader'
 import { Link } from "react-router-dom";
+import TranscriptSection from './templates/TranscriptSection';
+import TopicsSection from './templates/TopicsSection';
+import Buffer from './Buffer';
+import { useState } from 'react';
 
-const TranscriptPage = () => {
+const TranscriptPage = (props) => {
+
+    const exampleObject = [
+        {
+            "timestamp": "0:00",
+            "message": [
+                {
+                    "text": "blah blah blah",
+                    "timestamp": "0:15"
+                },
+                {
+                    "text": "blah blah blah",
+                    "timestamp": "0:25"
+                },
+                {
+                    "text": "blah blah blahaaa aaaaaa aaaaa aaaaaa aaa aaaaa aaaaa aaas ahh ahhh haa haa haa haaa ",
+                    "timestamp": "0:50"
+                },
+                {
+                    "text": "blah blah blah",
+                    "timestamp": "1:20"
+                }
+            ]
+        },
+        {
+            "timestamp": "1:30",
+            "message": [
+                {
+                    "text": "blah blah blah",
+                    "timestamp": "1:50"
+                },
+                {
+                    "text": "blah blah blah",
+                    "timestamp": "2:10"
+                },
+                {
+                    "text": "blah blah blah",
+                    "timestamp": "2:30"
+                },
+                {
+                    "text": "blah blah blah",
+                    "timestamp": "2:50"
+                }
+            ]
+        }
+    ];
+
+    const exampleTopics = [
+        { 
+          "type": "topic",
+          "timestamp": "0:45",
+          "text": "something or other"
+        },
+        {
+          "type": "question",
+          "timestamp": "2:30",
+          "text": "what is going on?"
+        }
+      ];
+    
+    const [currentTimestamp, setTimestamp] = useState(0);
+    
+    const skipAudio = (timestamp) => {
+        setTimestamp(timestamp);
+    }
+
     return (
         <div className="container-fluid vw-100">
             <AppHeader></AppHeader>
             <div className="interface d-flex flex-column ">
-                <div className="playbar vw-75 py-5"></div>
+                <div className="playbar vw-75 py-5">
+                    <audio controls src="./sample-audio.mp3" type="audio/mp3">
+                    </audio>
+                    Current timestamp is {currentTimestamp}
+                </div>
                 <div className="info w-100 d-flex justify-content-between align-items-start">
                     <div className="caption-info w-75 d-flex flex-column">
-                        <div className="toolbar p-4 mb-0">
-                            toolbar for highlight and comments on transcription as well as navigation
+                        <div className="toolbar p-4 my-0">
+                            toolbar for highlight ansd comments on transcription as well as navigation
                         </div>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
-                            <div className="section d-flex flex-row mb-3">
-                                <time className="time text-secondary">2:30</time>
-                                <div className="text">Structural engineering is a very important thing yes. This single timestamp has multiple sentences
-                                    or messages as they are represented in the api, allowing us to display a sizable amount of text without having to
-                                        put it on 1000 time stamps making it impossible to take notes on.
-                                </div>
-                            </div>
-                            <div className="section m-0  d-flex flex-row mb-3">
-                                <time className="time text-secondary">2:30</time>
-                                <div className="text">Structural engineering is a very important thing yes. This single timestamp has multiple sentences
-                                    or messages as they are represented in the api, allowing us to display a sizable amount of text without having to
-                                        put it on 1000 time stamps making it impossible to take notes on.
-                                </div>
-                            </div>
-                            <div className="section m-0 d-flex flex-row mb-3">
-                                <time className="time text-secondary">2:30</time>
-                                <div className="text">Structural engineering is a very important thing yes. This single timestamp has multiple sentences
-                                    or messages as they are represented in the api, allowing us to display a sizable amount of text without having to
-                                        put it on 1000 time stamps making it impossible to take notes on.
-                                </div>
-                            </div>
-                            <div className="section m-0 d-flex flex-row mb-3">
-                                <time className="time text-secondary">2:30</time>
-                                <div className="text">Structural engineering is a very important thing yes. This single timestamp has multiple sentences
-                                    or messages as they are represented in the api, allowing us to display a sizable amount of text without having to
-                                        put it on 1000 time stamps making it impossible to take notes on.
-                                </div>
-                            </div>
+                            { exampleObject.map((section) => (
+                                <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/>
+                            ))}
                         </div>
                     </div>
                     <div className="topics w-25 mt-0 p-4 overflow-scroll">
                         <h2>Topics and Questions</h2>
-                        <div className="timestamped-topic d-flex mb-2">
-                            <time className="timestamp fw-bold me-3">2:30</time>
-                            <div className="description">
-                                Topic: Structural Engineering
-                            </div>
-                        </div>
-                        <div className="timestamped-topic d-flex mb-2">
-                            <time className="timestamp fw-bold me-3">2:30</time>
-                            <div className="description">
-                                Topic: Structural Engineering
-                            </div>
-                        </div>
-                        <div className="timestamped-topic d-flex mb-2">
-                            <time className="timestamp fw-bold me-3">2:30</time>
-                            <div className="description">
-                                Topic: Structural Engineering
-                            </div>
-                        </div>
+                        { exampleTopics.map((section) => (
+                            <TopicsSection skipAudio={skipAudio} topic={section}/>
+                        ))
+
+                        }
                     </div>
                 </div>
             </div>

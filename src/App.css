@@ -35,13 +35,74 @@
 .time {
   margin-right: 3%; 
 }
+
 .transcription{
   height: 80%;
+}
+
+.transcript-phrase:hover {
+  background-color: rgb(185, 185, 185);
+  border-radius: 0.3em;
 }
 
 .menu-button{
   justify-self: flex-start;
 }
+
 .logo {
   width: 5em;
+}
+
+.bar {
+  width: 150px;
+  height: 15px;
+  border-radius: 15px;
+  margin: 10px auto;
+  border: 1px solid black;
+}
+/* 加载进度条框设置 */
+.bar span {
+  display: block;
+  width: 0px;
+  height: 15px;
+  border-radius: 14px;
+  background-image: linear-gradient(to top right, rgba(21, 24, 22, 0.322), rgba(11, 15, 15, 0.623), rgba(1, 2, 0, 0.993));
+  animation: bar 4s linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes bar {
+  0% {
+      width: 0%;
+  }
+
+  25% {
+      width: 25%;
+  }
+
+  50% {
+      width: 50%;
+  }
+
+  75% {
+      width: 75%;
+  }
+  100% {
+      width: 100%;
+  }
+}
+
+#num {
+  font-size: 14px;
+  display: inline;
+  position: relative;
+  left: 62px;
+  bottom: 18px;
+  z-index: 1;
+  color:darkgray;
+}
+
+.loading-gif {
+  width: 50px;
+  height:50px;
 }
