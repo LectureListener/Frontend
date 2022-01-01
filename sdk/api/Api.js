@@ -1,8 +1,8 @@
 const fetch = require("node-fetch")
 const { URL, URLSearchParams } = require("url")
 const ApiError = require("../errors/ApiError")
-const AudioConversation = require("../structures/AudioConversation")
-const VideoConversation = require("../structures/VideoConversation")
+const Conversation = require("../structures/Conversation")
+const Job = require("../structures/Job")
 
 const apiURL = "https://api.symbl.ai/"
 const apiVersion = "v1/"
@@ -41,12 +41,12 @@ class Api {
     // TODO: make it easier to add params (maybe)
     async createConversationFromAudio(audio, streamLength = 0, params = {}) {
         const { conversationId, jobId } = await this.createConversationFromData(audio, "process/audio", "process/audio/url", "POST", streamLength, params)
-        return new AudioConversation(conversationId, jobId, this.client)
+        return new Conversation(conversationId, [ new Job(jobId, this.client) ], this.client)
     }
 
     async createConversationFromVideo(video, streamLength = 0, params = {}) {
         const { conversationId, jobId } = await this.createConversationFromData(video, "process/video", "process/video/url", "POST", streamLength, params)
-        return new VideoConversation(conversationId, jobId, this.client)
+        return new Conversation(conversationId, [ new Job(jobId, this.client) ], this.client)
     }
 
     async createConversationFromData(data, endpoint, urlEndpoint, method, streamLength = 0, params = {}) {
@@ -66,6 +66,10 @@ class Api {
 
     async fetchConversations(params = {}) {
         return await this.endpoint("conversations", "GET", null, params)
+    }
+
+    createConversationFromId(conversationId) {
+        return new Conversation(conversationId, this.client)
     }
 }
 

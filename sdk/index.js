@@ -6,9 +6,8 @@ exports.Auth = require("./api/Auth")
 exports.Api = require("./api/Api")
 
 // structures
-exports.AudioConversation = require("./structures/AudioConversation")
-exports.BaseConversation = require("./structures/BaseConversation")
-exports.VideoConversation = require("./structures/VideoConversation")
+exports.Conversation = require("./structures/Conversation")
+exports.Job = require("./structures/Job")
 
 // errors
 exports.ApiError = require("./errors/ApiError")
