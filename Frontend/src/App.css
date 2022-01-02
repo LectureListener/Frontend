@@ -14,7 +14,7 @@
 }
 
 .body {
-  background-color: #E5E5E5 !important;
+  background-color: #E5E5E5;
 }
 
 .header {
@@ -26,7 +26,7 @@
   justify-content: center;
 }
 
-.toolbar, .transcription, .topics, .playbar, .id-box {
+.toolbar, .transcription, .topics, .playbar, .id-box, .error-msg {
   background-color: #F5F5F5 !important;
   margin: 2%;
 }
@@ -127,6 +127,6 @@ mark {
   background-color: darkgrey;
 }
 
-.id-page{
+.id-page, .error-page{
   background-color: #f5f5f569 !important;
 }

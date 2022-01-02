@@ -5,6 +5,7 @@ import TopicsSection from './templates/TopicsSection';
 import Toolbar from './templates/Toolbar';
 import Buffer from './Buffer';
 import LoadId from './templates/LoadId';
+import Error from './templates/Error';
 import { useState, useEffect } from 'react';
 import logic from '../logic';
 import sdk from '../sdk'
@@ -62,6 +63,7 @@ const TranscriptPage = (props) => {
     }
 
     const onSave = async () => {
+
         if (currentTranscript === 0)
             return
 
@@ -163,13 +165,14 @@ const TranscriptPage = (props) => {
     return (
         <div className="container-fluid vw-100 vh-100">
             <AppHeader currentPage={currentPage} changePage={setCurrentPage} onSave={onSave} onLoad={onLoad}></AppHeader>
-            <div className="interface d-flex flex-column ">
+            <div className="interface d-flex flex-column">
                 <div className="playbar h-25 py-4">
                     {(() => {
                         switch (currentPage) {
                             case 'transcript': return <audio id="audioPlayer" className="d-block mx-auto w-75" controls></audio>
                             case 'input': return <InputPage onFileUpload={onFileUpload}/>
                             case 'load' : return <LoadId onLoad={onLoad}/>
+                            case 'error': return <Error onClose={setCurrentPage}/>
                             case 'buffer' : return <Buffer/>
                         }
                     }) ()
