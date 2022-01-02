@@ -13,13 +13,13 @@ const AppHeader = (props) => {
                     </button>
                 </div>
                 <div className="saveButton mx-2">
-                    <button className="btn text-white" type="button" onClick={() => props.changePage("save")}>
+                    <button className="btn text-white" type="button" onClick={props.onSave}>
                         <FontAwesomeIcon icon={faSave} />
                         <span className="ps-2">Save</span>
                     </button>
                 </div>
                 <div className="loadButton mx-2">
-                    <button className="btn text-white" type="button" onClick={() => props.changePage("load")}>
+                    <button className="btn text-white" type="button" onClick={props.onLoad}>
                         <FontAwesomeIcon icon={faFolderOpen} />
                         <span className="ps-2">Load</span>
                     </button>

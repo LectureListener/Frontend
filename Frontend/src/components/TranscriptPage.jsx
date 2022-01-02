@@ -9,17 +9,15 @@ import logic from '../logic';
 import sdk from '../sdk'
 
 const TranscriptPage = (props) => {
-
-    const conversationData = {
-        client: null,
-        conversation: null,
-        conversationConverter: new logic.ConversationConverter()
-    }
-
+    const client = new sdk.Client()
     const onFileUpload = async (file) => {
-        if (conversationData.client === null) {
-            conversationData.client = new sdk.Client()
-            await conversationData.client.init({
+        let conversation = null
+        const conversationConverter = new logic.ConversationConverter()
+
+        setCurrentPage("load")
+
+        if (client.auth.accessToken === "") {
+            await client.init({
                 appId: "554d7a6d71387749336f69344c327671734d62553169663231635245394c3849",
                 // i swear i know what secret means my finger just slipped
                 appSecret: "666e76544141647162717a76733267765536767333725545424967434b6e47663767466a3642676467764545537a386c5446584b4f58553778694263592d5546"
@@ -27,17 +25,58 @@ const TranscriptPage = (props) => {
         }
 
         if (file.type.startsWith("audio"))
-            conversationData.conversation = await conversationData.client.api.createConversationFromAudio(file, file.size)
+            conversation = await client.api.createConversationFromAudio(file, file.size)
         else
-            conversationData.conversation = await conversationData.client.api.createConversationFromVideo(file, file.size)
-        await conversationData.conversation.jobs[0].waitForFinish()
-        // trigger loading
-        conversationData.conversationConverter.convert(conversationData.conversation)
-        setCurrentTranscript(conversationData.conversationConverter.messageConverter.messages)
-        setCurrentTopicAndQuestions(conversationData.conversationConverter.topicConverter.topicsAndQuestions)
-        console.log(conversationData.conversationConverter.messageConverter.messages)
-        console.log(conversationData.conversationConverter.topicConverter.topicsAndQuestions)
+            conversation = await client.api.createConversationFromVideo(file, file.size)
+        await conversation.jobs[0].waitForFinish()
+
+        conversationConverter.convert(conversation)
+        setCurrentTranscript(conversationConverter.messageConverter.messages)
+        setCurrentTopicAndQuestions(conversationConverter.topicConverter.topicsAndQuestions)
+        
+        setFile(file)
+    }
+
+    const setFile = (file) => {
         setCurrentPage("transcript")
+        toggleFullTranscript(true)
+           
+        const audio = document.getElementById("audioPlayer")
+        audio.src = URL.createObjectURL(file)
+    }
+
+    const backendUrl = "http://34.125.111.83:5000/"
+    const onLoad = async () => {
+        setCurrentPage("load")
+        
+        const page = 0 // get page number somehow
+        const res = await fetch(backendUrl + "transcription/" + page) 
+        const json = await res.json()
+
+        console.log(json.transcription)
+        setCurrentTopicAndQuestions(json.transcription.topicAndQuestions)
+        setCurrentTranscript(json.transcription.transcript)
+    }
+
+    const onSave = async () => {
+        if (currentTranscript === 0)
+            return
+
+        const options = {
+            method: "POST",
+            body: JSON.stringify({
+                transcription: JSON.stringify({
+                    transcript: currentTranscript,
+                    topicsAndQuestions: currentTopicAndQuestions,
+                })
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }
+        const res = await fetch(backendUrl + "transcription", options)
+        const { page } = await res.json()
+        console.log(page)
     }
 
     const [currentTopicAndQuestions, setCurrentTopicAndQuestions] = useState([])
@@ -55,23 +94,28 @@ const TranscriptPage = (props) => {
     }
 
     useEffect(() => {
-        document.getElementById("audioplayer").currentTime = currentTimestamp;
+        const audioPlayer = document.getElementById("audioPlayer")
+        audioPlayer.currentTime = currentTimestamp;
+        audioPlayer.play()
     }, [currentTimestamp]);
+
+    useEffect(() => {
+
+    }, [fullTranscript])
 
     return (
         <div className="container-fluid vw-100 vh-100">
-            <AppHeader currentPage={currentPage} changePage={setCurrentPage}></AppHeader>
+            <AppHeader currentPage={currentPage} changePage={setCurrentPage} onSave={onSave} onLoad={onLoad}></AppHeader>
             <div className="interface d-flex flex-column ">
-                <div className="playbar vw-75 py-4">
+                <div className="playbar h-25 py-4">
                     {(() => {
                         switch (currentPage) {
-                            case 'transcript': return <audio id="audioplayer" className="w-75" src="" currentTime={currentTimestamp} controls autoplay ></audio>
+                            case 'transcript': return <audio id="audioPlayer" className="d-block mx-auto w-75" controls></audio>
                             case 'input': return <InputPage onFileUpload={onFileUpload}/>
                             case 'load' : return <Buffer/>
                         }
                     }) ()
                     }
-                    Current timestamp is {currentTimestamp}
                 </div>
                 <div className="info w-100 d-flex justify-content-between align-items-start">
                     <div className="caption-info w-75 d-flex flex-column">

@@ -18,11 +18,11 @@ const InputPage = (props) => {
 
     return (
         <div className="input-page text-center">
-            <button className="btn text-white" onClick={onClick}>
+            <button className="btn text-white w-50 h-75" onClick={onClick}>
                 <FontAwesomeIcon icon={faUpload}></FontAwesomeIcon>
                 <span className="ps-2">Upload</span>
             </button>
-            <input className="d-none" type="file" id="upload" onInput={onUpdate.bind(this)} ref={fileInput} accept="audio/wav, audio/mpeg, audio/mp3, audio/wav" />
+            <input className="d-none" type="file" id="upload" onInput={onUpdate} ref={fileInput} accept="audio/wav, audio/mpeg, audio/mp3, audio/wav" />
         </div>
     )
 }
