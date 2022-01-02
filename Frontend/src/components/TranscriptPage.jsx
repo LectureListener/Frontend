@@ -166,7 +166,7 @@ const TranscriptPage = (props) => {
 
     return (
         <div className="container-fluid vw-100 vh-100">
-            {errorToggle ? <Error onClose={() => toggleError(false)} /> : null }
+            {errorToggle ? <Error onClose={toggleError} /> : null }
             <AppHeader currentPage={currentPage} changePage={setCurrentPage} onSave={onSave} onLoad={onLoad}></AppHeader>
             <div className="interface d-flex flex-column">
                 <div className="playbar h-25 py-4">
@@ -184,15 +184,6 @@ const TranscriptPage = (props) => {
                     <div className="caption-info w-75 d-flex flex-column">
                         <Toolbar highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null} onComment={() => toggleError(true)}></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
-<<<<<<< HEAD
-                            { currentPage === 'transcript' ? 
-                                fullTranscript ?
-                                currentTranscript.map((section) => (
-                                    <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/>
-                                ))  
-                            : "Highlighted stuff" // placeholder
-                            : null                    
-=======
                             {(() => { 
                                 if (fullTranscript) {
                                     return currentTranscript.map((section) => (
@@ -207,7 +198,6 @@ const TranscriptPage = (props) => {
                                     return sections
                                 }
                             }) ()                
->>>>>>> 36bb2b27cbb2b3060105e17a697c8b97f7f6b0a6
                             }
                         </div>
                     </div>

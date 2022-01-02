@@ -2,7 +2,7 @@ const TopicsSection = (props) => {
     return (
         <div className="timestamped-topic d-flex mb-2">
             <time className="timestamp fw-bold me-3">
-                <button onClick={() => props.skipAudio(props.topic.timestamp)} className="btn text-white p-1">
+                <button onClick={() => props.skipAudio(props.topic.timestamp)} className="btn btn-grey text-white p-1">
                     {props.topic.timestamp}
                 </button>
             </time>
