@@ -5,15 +5,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import TranscriptPage from './components/TranscriptPage';
 import InputPage from './components/InputPage';
 import Buffer from './components/Buffer';
+import { useState, useEffect } from 'react';
 
 function App() {
+
   return (
       <div className="app">
+        <div>
+        </div>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<TranscriptPage/>}/>
+            <Route path="" element={<TranscriptPage/>}/>
             <Route path="/input" element={<InputPage /> }/>
-            <Route path="/menu" element={ <Buffer /> }/>
+            <Route path="/menu" element={ <Buffer />}/>
           </Routes>
         </BrowserRouter>
       </div>

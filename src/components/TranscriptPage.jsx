@@ -65,7 +65,7 @@ const TranscriptPage = (props) => {
           "text": "what is going on?"
         }
       ];
-    
+        
     const [currentTimestamp, setTimestamp] = useState(0);
     
     const skipAudio = (timestamp) => {
@@ -81,7 +81,7 @@ const TranscriptPage = (props) => {
         <div className="container-fluid vw-100 vh-100">
             <AppHeader></AppHeader>
             <div className="interface d-flex flex-column ">
-                <div className="playbar vw-75 py-5">
+                <div className="playbar vw-75 py-4">
                     <audio id="audioplayer" className="w-75" src="" currentTime={currentTimestamp} controls autoplay >
                     </audio>
                     Current timestamp is {currentTimestamp}
