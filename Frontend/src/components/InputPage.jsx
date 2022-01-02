@@ -1,5 +1,3 @@
-import logo from "../images/logo.png";
-
 const InputPage = (props) => {
     return (
         <div className="input-page d-flex align-items-center justify-content-around">

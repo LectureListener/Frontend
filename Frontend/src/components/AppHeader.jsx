@@ -1,21 +1,32 @@
-import { Link } from "react-router-dom";
-import { useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faFile, faFolderOpen, faSave } from "@fortawesome/free-solid-svg-icons"
 import logo from "../images/logo.png";
+
 const AppHeader = (props) => {
     return (
-        <div id="header" className="header d-flex vw-100">
-            <div className="newButton">
-                <button type="button" onClick={() => props.changePage("input")}>new</button>
+        <div id="header" className="header d-flex justify-content-center position-relative">
+            <div className="header-button-container d-flex flex-row start-0 mx-2 position-absolute w-25">
+                <div className="newButton mx-2">
+                    <button className="btn text-white" type="button" onClick={() => props.changePage("input")}>
+                        <FontAwesomeIcon icon={faFile} />
+                        <span className="ps-2">New</span>
+                    </button>
+                </div>
+                <div className="saveButton mx-2">
+                    <button className="btn text-white" type="button" onClick={() => props.changePage("save")}>
+                        <FontAwesomeIcon icon={faSave} />
+                        <span className="ps-2">Save</span>
+                    </button>
+                </div>
+                <div className="loadButton mx-2">
+                    <button className="btn text-white" type="button" onClick={() => props.changePage("load")}>
+                        <FontAwesomeIcon icon={faFolderOpen} />
+                        <span className="ps-2">Load</span>
+                    </button>
+                </div>
             </div>
-            <div className="saveButton">
-                <button type="button" onClick={() => props.changePage("save")}>save</button>
-            </div>
-            <div className="loadButton">
-                <button type="button" onClick={() => props.changePage("load")}>load</button>
-            </div>
-            <div className="title d-flex mx-auto">
-            <h2 className="align-self-center">LECTURE LISTENER</h2>
-            <img className="image logo" alt="logo" src={logo}></img>
+            <div className="title mx-auto text-center">
+                <img className="image logo" alt="logo" src={logo}></img>
             </div>
         </div>
     )

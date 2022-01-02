@@ -49,41 +49,8 @@
   justify-self: flex-start;
 }
 
-.newButton button{
-  background-color: #050505; 
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-}
-
-.saveButton button{
-  background-color: #4e4c4c; 
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-}
-
-.loadButton button {
-  background-color: #999696; 
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-}
-
 .logo {
-  width: 5em;
+  width: 10%;
 }
 
 .bar {
@@ -141,9 +108,9 @@
 }
 
 .btn:hover{
-  background-color: rgb(236, 236, 236);
+  background-color: rgb(143, 143, 143)!important; 
 }
 
-.toolbar .btn {
-  background-color: darkgrey;
+.btn {
+  background-color: darkgrey!important;
 }
