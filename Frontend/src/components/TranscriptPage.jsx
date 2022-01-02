@@ -95,6 +95,8 @@ const TranscriptPage = (props) => {
 
     const [highlightToggle, toggleHighlight] = useState(false)
 
+    const [errorToggle, toggleError] = useState(false);
+
     const skipAudio = (timestamp) => {
         setTimestamp(parseInt(timestamp.split(':')[0] * 60) + parseInt(timestamp.split(':')[1]));
     }
@@ -165,6 +167,7 @@ const TranscriptPage = (props) => {
 
     return (
         <div className="container-fluid vw-100 vh-100">
+            {errorToggle ? <Error onClose={() => toggleError(false)} /> : null }
             <AppHeader currentPage={currentPage} changePage={setCurrentPage} onSave={onSave} onLoad={onLoad}></AppHeader>
             <div className="interface d-flex flex-column">
                 <div className="playbar h-25 py-4">
@@ -180,14 +183,14 @@ const TranscriptPage = (props) => {
                 </div>
                 <div className="info w-100 d-flex justify-content-between align-items-start">
                     <div className="caption-info w-75 d-flex flex-column">
-                        <Toolbar highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null}></Toolbar>
+                        <Toolbar highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null} onComment={() => toggleError(true)}></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
                             { currentPage === 'transcript' ? 
                                 fullTranscript ?
                                 currentTranscript.map((section) => (
                                     <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/>
                                 ))  
-                            : <Error onClose={setCurrentPage}/> // placeholder
+                            : "Highlighted stuff" // placeholder
                             : null                    
                             }
                         </div>

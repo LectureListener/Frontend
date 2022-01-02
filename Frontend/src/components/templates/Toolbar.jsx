@@ -9,7 +9,7 @@ const Toolbar = (props) => {
                 <span className="ps-2">Highlight</span>
             </button>
             <button className="btn btn-grey text-white" onClick={props.toggleTranscript}>{props.isFullTranscript ? "View Highlighted Sections" : "View Full Transcript"}</button>
-            <button className="btn btn-grey text-white">Add Comment</button>
+            <button className="btn btn-grey text-white" onClick={props.onComment}>Add Comment</button>
         </div>
     )
 }
