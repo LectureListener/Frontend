@@ -29,7 +29,7 @@ class Auth {
 
         setTimeout(() => {
             this.init(this.appId, this.appSecret)
-        }, expiresIn - 1000) // add a bit of time before it actually expires before getting a new one
+        }, (expiresIn - 1000) * 1000) // add a bit of time before it actually expires before getting a new one
     }
 }
 

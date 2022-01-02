@@ -19,6 +19,16 @@ class Job {
         }
         setTimeout(wait, 1000);
     }
+
+    waitForFinish() {
+        return new Promise((resolve, reject) => {
+            try {
+                this.onFinish(resolve)
+            } catch(error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 module.exports = Job

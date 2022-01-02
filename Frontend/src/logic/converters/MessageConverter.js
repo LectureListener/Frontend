@@ -10,9 +10,9 @@ class MessageConverter {
     }
 
     convert(messages) {
-        if (!messages)
+        if (!messages || messages.length === 0)
             return
-
+        
         const clipStartTime = new Date(messages[0].startTime)
 
         let currentMessageLength = 0

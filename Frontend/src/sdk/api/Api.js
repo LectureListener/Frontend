@@ -2,7 +2,6 @@ const fetch = require("node-fetch")
 const ApiError = require("../errors/ApiError")
 const Conversation = require("../structures/Conversation")
 const Job = require("../structures/Job")
-
 const apiURL = "https://api.symbl.ai/"
 const apiVersion = "v1/"
 
@@ -44,11 +43,11 @@ class Api {
     }
 
     async createConversationFromVideo(video, streamLength = 0, params = {}) {
-        const { conversationId, jobId } = await this.createConversationFromData(video, "process/video", "process/video/url", "POST", streamLength, params)
+        const { conversationId, jobId } = await this.createConversationFromData(video, "process/video", "process/video/url", "POST", streamLength, params, {"Content-Type": "video/mp4"})
         return new Conversation(conversationId, this.client, [ new Job(jobId, this.client) ])
     }
 
-    async createConversationFromData(data, endpoint, urlEndpoint, method, streamLength = 0, params = {}) {
+    async createConversationFromData(data, endpoint, urlEndpoint, method, streamLength = 0, params = {}, headers = {}) {
         let res = null
         // if we're given a string it's probably a url
         if (typeof data === "string") {
@@ -56,9 +55,7 @@ class Api {
                 params.url = data
             res = await this.endpoint(urlEndpoint, method, JSON.stringify(params), null, {"Content-Type": "application/json"})
         } else {
-            const headers = {
-                "Content-Length": streamLength
-            }
+            headers["Content-Length"] = streamLength
     
             res = await this.endpoint(endpoint, method, data, params, headers)
         }

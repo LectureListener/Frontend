@@ -48,16 +48,15 @@ class TopicAndQuestionConverter {
         let lastTopicOrQuestion = { text: "" }
         sortedArray.forEach((topicOrQuestion) => {
             if (topicOrQuestion.text !== lastTopicOrQuestion.text) {
-                const topicObject = {
+                const topicOrQuestionObject = {
                     type: topicOrQuestion.type,
                     text: topicOrQuestion.text,
                     timestamp: DateFormatter.toMinutesAndHours(new Date(topicOrQuestion.timestamp))
                 }
-                this.topicsAndQuestions.push(topicObject)
+                this.topicsAndQuestions.push(topicOrQuestionObject)
             }
             lastTopicOrQuestion = topicOrQuestion
         })
-        console.log(this.topicsAndQuestions)
     }
 }
 
