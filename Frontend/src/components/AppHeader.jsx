@@ -1,27 +1,22 @@
 import { Link } from "react-router-dom";
 import { useState } from 'react';
 import logo from "../images/logo.png";
-import InputPage from './InputPage';
-const AppHeader = () => {
-
-    const [inputPage, displayInputPage] = useState(false);
+const AppHeader = (props) => {
 
     return (
         <div id="header" className="header d-flex vw-100">
-            <button onClick={() => displayInputPage(true)} class="btn menu-button bg-secondary text-white">Menu</button>
-            {inputPage ? <InputPage return={() => displayInputPage(false)}/> : null }
             <div className="newButton">
-                <botton type="button" onclick="'InputPage.jsx'">new</botton>
+                <button type="button" onClick={props.displayInput}>new</button>
             </div>
             <div className="saveButton">
-                <botton type="button">save</botton>
+                <button type="button">save</button>
             </div>
             <div className="loadButton">
-                <botton type="button">load</botton>
+                <button type="button">load</button>
             </div>
             <div className="title d-flex mx-auto">
-                <img className="image logo" alt="logo" src={logo}></img>
-                <h4>Lecture Listener</h4>
+            <h1>LECTURE LISTENER</h1>
+            <img className="image logo" alt="logo" src={logo}></img>
             </div>
         </div>
     )

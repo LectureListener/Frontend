@@ -1,6 +1,7 @@
 import AppHeader from './AppHeader'
 import { Link } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import InputPage from './InputPage';
 import TranscriptSection from './templates/TranscriptSection';
 import TopicsSection from './templates/TopicsSection';
 import Toolbar from './templates/Toolbar';
@@ -47,9 +48,13 @@ const TranscriptPage = (props) => {
           "text": "what is going on?"
         }
       ];
-        
+
+    const [inputPage, displayInputPage] = useState(false);
+  
     const [currentTimestamp, setTimestamp] = useState(0);
     
+    const [fullTranscript, toggleFullTranscript] = useState(true);
+
     const skipAudio = (timestamp) => {
         setTimestamp(parseInt(timestamp.split(':')[0] * 60) + parseInt(timestamp.split(':')[1]));
     }
@@ -61,20 +66,26 @@ const TranscriptPage = (props) => {
 
     return (
         <div className="container-fluid vw-100 vh-100">
-            <AppHeader></AppHeader>
+            <AppHeader inputPage={inputPage} displayInput={() => displayInputPage(true)}></AppHeader>
             <div className="interface d-flex flex-column ">
                 <div className="playbar vw-75 py-4">
-                    <audio id="audioplayer" className="w-75" src="" currentTime={currentTimestamp} controls autoplay >
-                    </audio>
+                    { !inputPage ?
+                        <audio id="audioplayer" className="w-75" src="" currentTime={currentTimestamp} controls autoplay >
+                        </audio>
+                        : <InputPage/>
+                    }
                     Current timestamp is {currentTimestamp}
                 </div>
                 <div className="info w-100 d-flex justify-content-between align-items-start">
                     <div className="caption-info w-75 d-flex flex-column">
-                        <Toolbar></Toolbar>
+                        <Toolbar isFullTranscript={fullTranscript} toggleTranscript={() => toggleFullTranscript(!fullTranscript)}></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
-                            { exampleObject.map((section) => (
-                                <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/>
-                            ))}
+                            { fullTranscript ?
+                                 exampleObject.map((section) => (
+                                    <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/>
+                                ))  
+                            : "Highlighted stuff"                       
+                            }
                         </div>
                     </div>
                     <div className="topics w-25 mt-0 p-4 overflow-scroll">
