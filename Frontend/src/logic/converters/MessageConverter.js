@@ -1,6 +1,6 @@
 const DateFormatter = require("../utils/DateFormatter")
 
-const maxMessageLength = 10
+const maxMessageLength = 20
 
 class MessageConverter {
     constructor() {

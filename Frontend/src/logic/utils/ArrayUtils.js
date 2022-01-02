@@ -17,6 +17,9 @@ class ArrayUtils {
             }
         }
         array.push(range)
+        // guarantee order of array
+        array.sort((lVal, rVal) => rVal[0] - lVal[0])
+        console.log(array)
     }
 }
 

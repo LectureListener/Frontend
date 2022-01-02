@@ -7,8 +7,10 @@ class HighlightConverter {
 
     convert(selection) {
         if (selection.type !== "Range" || selection.rangeCount == 0)
-            return
+            return null
 
+        const changedElements = []
+        console.log(selection)
         for (let i = 0; i < selection.rangeCount; i++) {
             const range = selection.getRangeAt(i)
                 
@@ -16,27 +18,53 @@ class HighlightConverter {
             const startNode = range.startContainer
             const endNode = range.endContainer
 
-            const startElement = startNode.parentElement
-            const endElement = endNode.parentElement   
-            
+            // get first a tags so we dont need to worry about the stupid mark tags 
+            let startElement = startNode.parentElement
+            while (startElement.tagName !== "A")
+                startElement = startElement.parentElement
+
+            let endElement = endNode.parentElement   
+            while (endElement.tagName !== "A")
+                endElement = endElement.parentElement
+
             const transcriptContainer = document.getElementsByClassName("transcription")[0]
             // if there is highlighting out of the transcription
             if (!transcriptContainer.contains(ancestor))
-                return
+                return null
 
             // if the end node is part of the space at the end, we have to specially assign it an offset
             let endOffset = -1
-            if (endNode.data !== endNode.data.trim())
-                endOffset = endElement.text.length
-            else  
+            if (endNode.data.trim() === "") {
+                endOffset = endElement.textContent.length
+            } else {
+                // we also need to check if there are any nodes before ours and add their string length to the offsets
                 endOffset = range.endOffset
+                // loop through child nodes to get the index from now
+                for (let i = 0; i < endElement.childNodes.length; i++) {
+                    const node = endElement.childNodes[i]
+                    
+                    if (node.isSameNode(endNode.parentElement) || node.isSameNode(endNode))
+                        break
+                    endOffset += node.textContent.length
+                }
+            }
 
             // do same for beginning 
             let startOffset = -1
-            if (startNode.data !== startNode.data.trim())
-                startOffset = startElement.text.length - 1
-            else
+            if (startNode.data.trim() === "") {
+                startOffset = startElement.textContent.length - 1
+            } else {
+                // we also need to check if there are any nodes before ours and add their string length to the offsets
                 startOffset = range.startOffset
+                // loop through child nodes to get the index from now
+                for (let i = 0; i < startElement.childNodes.length; i++) {
+                    const node = startElement.childNodes[i]
+                    
+                    if (node.isSameNode(startNode.parentElement) || node.isSameNode(startNode))
+                        break
+                    startOffset += node.textContent.length
+                }
+            }
 
             // get row of end and start nodes
             let startRowContainer = startElement
@@ -52,33 +80,37 @@ class HighlightConverter {
                 // if theyre the same then it's special
                 if (startElement.isSameNode(endElement)) {
                     ArrayUtils.pushRangeNoOverlap(this.messageConverter.messagesById[startElement.id].highlights, [ startOffset, endOffset ])
-                    return
+                    changedElements.push(startElement)
+                    return changedElements
                 }
 
                 // do start one becuase it is special
-                ArrayUtils.pushRangeNoOverlap(this.messageConverter.messagesById[startElement.id].highlights, [ startOffset, startElement.text.length ])
+                ArrayUtils.pushRangeNoOverlap(this.messageConverter.messagesById[startElement.id].highlights, [ startOffset, startElement.textContent.length ])
+                changedElements.push(startElement)
 
                 let currentElement = startElement.nextSibling
                 while (!currentElement.isSameNode(endElement)) {
-                    this.messageConverter.messagesById[currentElement.id].highlights = [ [ 0, currentElement.text.length ] ]
+                    this.messageConverter.messagesById[currentElement.id].highlights = [ [ 0, currentElement.textContent.length ] ]
+                    changedElements.push(currentElement)
 
                     currentElement = currentElement.nextSibling
                 }
 
                 // do last becuase it's also special
                 ArrayUtils.pushRangeNoOverlap(this.messageConverter.messagesById[endElement.id].highlights, [ 0, endOffset ])
-                return
+                changedElements.push(endElement)
+                return changedElements
             }
 
-
-
             // update the message of the start node first
-            ArrayUtils.pushRangeNoOverlap(this.messageConverter.messagesById[startElement.id].highlights, [ startOffset, startElement.text.length ])
+            ArrayUtils.pushRangeNoOverlap(this.messageConverter.messagesById[startElement.id].highlights, [ startOffset, startElement.textContent.length ])
+            changedElements.push(startElement)
 
             // loop through sibllings till at next row
             let currentElement = startElement.nextSibling
             while (currentElement) {
-                this.messageConverter.messagesById[currentElement.id].highlights = [ [ 0, currentElement.text.length ] ]
+                this.messageConverter.messagesById[currentElement.id].highlights = [ [ 0, currentElement.textContent.length ] ]
+                changedElements.push(currentElement)
 
                 currentElement = currentElement.nextSibling
             }
@@ -88,7 +120,8 @@ class HighlightConverter {
             while (!currentRowContainer.isSameNode(endRowContainer)) {
                 const phrases = currentRowContainer.getElementsByClassName("transcript-phrase")
                 for (let i = 0; i < phrases.length; i++) {
-                    this.messageConverter.messagesById[phrases[i].id].highlights = [ [ 0, phrases[i].length ] ]
+                    this.messageConverter.messagesById[phrases[i].id].highlights = [ [ 0, phrases[i].textContent.length ] ]
+                    changedElements.push(phrases[i])
                 }
 
                 currentRowContainer = currentRowContainer.nextSibling
@@ -96,15 +129,18 @@ class HighlightConverter {
                 
             // do last element
             ArrayUtils.pushRangeNoOverlap(this.messageConverter.messagesById[endElement.id].highlights, [0, endOffset])
+            changedElements.push(endElement)
 
             // do last row // go backwards so a getElementsByClassName call isn't needed
             currentElement = endElement.previousSibling
             while (currentElement) {
-                this.messageConverter.messagesById[currentElement.id].highlights = [ [ 0, currentElement.text.length ] ]
+                this.messageConverter.messagesById[currentElement.id].highlights = [ [ 0, currentElement.textContent.length ] ]
+                changedElements.push(currentElement)
 
                 currentElement = currentElement.previousSibling
             }
         }
+        return changedElements
     }
 }
 
