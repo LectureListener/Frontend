@@ -102,7 +102,7 @@ const TranscriptPage = (props) => {
         let timestampArgs = timestamp.split(":");
         let numSecs = 0;
         for (let i = 1; i <= timestampArgs.length; i++){
-            numSecs += parseInt(timestampArgs[timestampArgs.length - i]) * (Math.pow(60, i) / 60);
+            numSecs += parseInt(timestampArgs[timestampArgs.length - i]) * (Math.pow(60, i - 1));
         }
         setTimestamp(numSecs);
     }
