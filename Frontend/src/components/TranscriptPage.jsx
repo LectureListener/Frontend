@@ -49,7 +49,7 @@ const TranscriptPage = (props) => {
         }
       ];
 
-    const [inputPage, displayInputPage] = useState(false);
+    const [currentPage, setCurrentPage] = useState("transcript");
   
     const [currentTimestamp, setTimestamp] = useState(0);
     
@@ -66,21 +66,24 @@ const TranscriptPage = (props) => {
 
     return (
         <div className="container-fluid vw-100 vh-100">
-            <AppHeader inputPage={inputPage} displayInput={() => displayInputPage(true)}></AppHeader>
+            <AppHeader currentPage={currentPage} changePage={setCurrentPage}></AppHeader>
             <div className="interface d-flex flex-column ">
                 <div className="playbar vw-75 py-4">
-                    { !inputPage ?
-                        <audio id="audioplayer" className="w-75" src="" currentTime={currentTimestamp} controls autoplay >
-                        </audio>
-                        : <InputPage/>
+                    {(() => {
+                        switch (currentPage) {
+                            case 'transcript': return <audio id="audioplayer" className="w-75" src="" currentTime={currentTimestamp} controls autoplay ></audio>
+                            case 'input': return <InputPage/>
+                            case 'load' : return <Buffer/>
+                        }
+                    }) ()
                     }
                     Current timestamp is {currentTimestamp}
                 </div>
                 <div className="info w-100 d-flex justify-content-between align-items-start">
                     <div className="caption-info w-75 d-flex flex-column">
-                        <Toolbar isFullTranscript={fullTranscript} toggleTranscript={() => toggleFullTranscript(!fullTranscript)}></Toolbar>
+                        <Toolbar isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null}></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
-                            { !inputPage ? 
+                            { currentPage === 'transcript' ? 
                                 fullTranscript ?
                                  exampleObject.map((section) => (
                                     <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/>

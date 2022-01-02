@@ -1,6 +1,6 @@
 const Buffer = () => {
     return (
-        <div className="box buffer-screen zindex-modal w-100 h-100 bg-secondary">
+        <div className="box buffer-screen zindex-modal w-100 h-100">
             <div className="head">
                 <span className="text-center"/>
                 <p className="text-center">
