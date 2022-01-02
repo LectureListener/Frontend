@@ -78,7 +78,7 @@ const TranscriptPage = (props) => {
 
 
     return (
-        <div className="container-fluid vw-100">
+        <div className="container-fluid vw-100 vh-100">
             <AppHeader></AppHeader>
             <div className="interface d-flex flex-column ">
                 <div className="playbar vw-75 py-5">

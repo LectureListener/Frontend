@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const logo = require("./logo.png");
+import logo from "../images/logo.png";
 
 const AppHeader = () => {
     return (
