@@ -3,55 +3,37 @@ import { Link } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TranscriptSection from './templates/TranscriptSection';
 import TopicsSection from './templates/TopicsSection';
+import Toolbar from './templates/Toolbar';
 import Buffer from './Buffer';
 import { useState, useEffect } from 'react';
 
 const TranscriptPage = (props) => {
 
-    const exampleObject = [
-        {
-            "timestamp": "0:00",
-            "message": [
-                {
-                    "text": "blah blah blah",
-                    "timestamp": "0:15"
-                },
-                {
-                    "text": "blah blah blah",
-                    "timestamp": "0:25"
-                },
-                {
-                    "text": "blah blah blahaaa aaaaaa aaaaa aaaaaa aaa aaaaa aaaaa aaas ahh ahhh haa haa haa haaa ",
-                    "timestamp": "0:50"
-                },
-                {
-                    "text": "blah blah blah",
-                    "timestamp": "1:20"
-                }
-            ]
-        },
-        {
+    const exampleObject =  [{
             "timestamp": "1:30",
             "message": [
-                {
-                    "text": "blah blah blah",
-                    "timestamp": "1:50"
-                },
-                {
-                    "text": "blah blah blah",
-                    "timestamp": "2:10"
-                },
-                {
-                    "text": "blah blah blah",
-                    "timestamp": "2:30"
-                },
-                {
-                    "text": "blah blah blah",
-                    "timestamp": "2:50"
-                }
-            ]
-        }
-    ];
+            {
+                "text": "blah blah blah",
+                "timestamp": "1:50",
+                "id": 123098350498234
+            },
+            {
+                "text": "blah blah blah",
+                "timestamp": "2:10",
+                "id": 123098350498234
+            },
+            {
+                "text": "blah blah blah",
+                "timestamp": "2:30",
+                "id": 123098350498234
+            },
+            {
+                "text": "blah blah blah",
+                "timestamp": "2:50",
+                "id": 123098350498234
+            }
+        ]
+    }];
 
     const exampleTopics = [
         { 
@@ -88,9 +70,7 @@ const TranscriptPage = (props) => {
                 </div>
                 <div className="info w-100 d-flex justify-content-between align-items-start">
                     <div className="caption-info w-75 d-flex flex-column">
-                        <div className="toolbar p-4 my-0">
-                            toolbar for highlight ansd comments on transcription as well as navigation
-                        </div>
+                        <Toolbar></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
                             { exampleObject.map((section) => (
                                 <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/>
