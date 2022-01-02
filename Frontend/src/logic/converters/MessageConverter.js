@@ -6,6 +6,7 @@ class MessageConverter {
     constructor() {
         // convert from the api's messages to something our website can use
         this.messages = []
+        this.messagesById = {}
     }
 
     convert(messages) {
@@ -33,9 +34,12 @@ class MessageConverter {
 
             const currentLine = {
                 text: apiMessage.text,
-                timestamp: currentLineTimestamp
+                timestamp: currentLineTimestamp,
+                id: apiMessage.id,
+                highlights: []
             }
             currentMessage.message.push(currentLine)
+            this.messagesById[currentLine.id] = currentLine
             
             // if exceed the length, reset everything and go to next message
             if (currentMessageLength > maxMessageLength) {

@@ -47,7 +47,7 @@ class TopicAndQuestionConverter {
         // loop through the array and if the topic/question changes from the previous, add it to our final array, else continue
         let lastTopicOrQuestion = { text: "" }
         sortedArray.forEach((topicOrQuestion) => {
-            if (topicOrQuestion.text != lastTopicOrQuestion.text) {
+            if (topicOrQuestion.text !== lastTopicOrQuestion.text) {
                 const topicObject = {
                     type: topicOrQuestion.type,
                     text: topicOrQuestion.text,
