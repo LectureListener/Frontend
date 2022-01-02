@@ -173,7 +173,6 @@ const TranscriptPage = (props) => {
                             case 'transcript': return <audio id="audioPlayer" className="d-block mx-auto w-75" controls></audio>
                             case 'input': return <InputPage onFileUpload={onFileUpload}/>
                             case 'load' : return <LoadId onLoad={onLoad}/>
-                            case 'error': return <Error onClose={setCurrentPage}/>
                             case 'buffer' : return <Buffer/>
                         }
                     }) ()
@@ -188,7 +187,7 @@ const TranscriptPage = (props) => {
                                 currentTranscript.map((section) => (
                                     <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/>
                                 ))  
-                            : "Highlighted stuff"  
+                            : <Error onClose={setCurrentPage}/> // placeholder
                             : null                    
                             }
                         </div>
