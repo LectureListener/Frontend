@@ -7,19 +7,19 @@ const AppHeader = (props) => {
         <div id="header" className="header d-flex justify-content-center position-relative">
             <div className="header-button-container d-flex flex-row start-0 mx-2 position-absolute w-25">
                 <div className="newButton mx-2">
-                    <button className="btn text-white" type="button" onClick={() => props.changePage("input")}>
+                    <button className="btn btn-grey text-white" type="button" onClick={() => props.changePage("input")}>
                         <FontAwesomeIcon icon={faFile} />
                         <span className="ps-2">New</span>
                     </button>
                 </div>
                 <div className="saveButton mx-2">
-                    <button className="btn text-white" type="button" onClick={props.onSave}>
+                    <button className="btn btn-grey text-white" type="button" onClick={props.onSave}>
                         <FontAwesomeIcon icon={faSave} />
                         <span className="ps-2">Save</span>
                     </button>
                 </div>
                 <div className="loadButton mx-2">
-                    <button className="btn text-white" type="button" onClick={props.onLoad}>
+                    <button className="btn btn-grey text-white" type="button" onClick={props.onLoad}>
                         <FontAwesomeIcon icon={faFolderOpen} />
                         <span className="ps-2">Load</span>
                     </button>

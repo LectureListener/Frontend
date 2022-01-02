@@ -8,11 +8,13 @@ import { useState, useEffect } from 'react';
 import logic from '../logic';
 import sdk from '../sdk'
 
+const client = new sdk.Client()
+const conversationConverter = new logic.ConversationConverter()
+const highlightConverter =  new logic.HighlightConverter(conversationConverter.messageConverter)
+
 const TranscriptPage = (props) => {
-    const client = new sdk.Client()
     const onFileUpload = async (file) => {
         let conversation = null
-        const conversationConverter = new logic.ConversationConverter()
 
         setCurrentPage("load")
 
@@ -30,9 +32,9 @@ const TranscriptPage = (props) => {
             conversation = await client.api.createConversationFromVideo(file, file.size)
         await conversation.jobs[0].waitForFinish()
 
-        conversationConverter.convert(conversation)
+        await conversationConverter.convert(conversation)
         setCurrentTranscript(conversationConverter.messageConverter.messages)
-        setCurrentTopicsAndQuestions(conversationConverter.topicConverter.topicsAndQuestions)
+        setCurrentTopicsAndQuestions(conversationConverter.topicAndQuestionConverter.topicsAndQuestions)
         
         setFile(file)
     }
@@ -105,6 +107,60 @@ const TranscriptPage = (props) => {
 
     }, [fullTranscript])
 
+    useEffect(() => {
+        let appStylesheet = null
+        for (let i = 0; i < document.styleSheets.length; i++) {
+            const sheet = document.styleSheets.item(i)
+            if (sheet.cssRules.length > 0 && sheet.cssRules.item(0).cssText.startsWith("#identifier")) {
+                appStylesheet = sheet
+                break                
+            }
+        }
+
+        const button = document.getElementById("highlightButton")
+        if (highlightToggle) {
+            button.style.backgroundColor = "rgb(167, 58, 63)"
+            // disable dragging, and turn a tags into regular text
+            appStylesheet.insertRule("a { pointer-events: none; cursor: default; user-drag: none; -webkit-user-drag: none; }", 1)
+        } else {
+            button.style.backgroundColor = "darkgrey"
+            appStylesheet.deleteRule(1)
+        }
+    }, [highlightToggle])
+
+    useEffect(() => {
+        window.addEventListener("beforeunload", (event) => {
+            const confirmationMessage = 'It looks like you have been editing something. '
+            + 'If you leave before saving, your changes will be lost.';
+
+            (event || window.event).returnValue = confirmationMessage;
+            return confirmationMessage; 
+        }) 
+
+        const parseHighlight = () => {
+            const changedMessages = highlightConverter.convert(window.getSelection())
+            if (changedMessages == null)
+                return
+            
+            window.getSelection().removeAllRanges()
+            changedMessages.forEach((element) => {
+                console.log(element)
+                const highlights = highlightConverter.messageConverter.messagesById[element.id].highlights
+                let text = element.textContent
+                for (let i = 0; i < highlights.length; i++) {
+                    const range = highlights[i]
+                    // add length of mark tags
+                    console.log(range)
+                    text = text.substring(0, range[0]) + "<mark>" + text.substring(range[0], range[1]) + "</mark>" + text.substring(range[1]);
+                }
+                element.innerHTML = text
+            })
+        }
+
+        document.onmouseup = parseHighlight
+        document.onkeyup = parseHighlight
+    })
+
     return (
         <div className="container-fluid vw-100 vh-100">
             <AppHeader currentPage={currentPage} changePage={setCurrentPage} onSave={onSave} onLoad={onLoad}></AppHeader>
@@ -121,7 +177,7 @@ const TranscriptPage = (props) => {
                 </div>
                 <div className="info w-100 d-flex justify-content-between align-items-start">
                     <div className="caption-info w-75 d-flex flex-column">
-                        <Toolbar isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null}></Toolbar>
+                        <Toolbar highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null}></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
                             { currentPage === 'transcript' ? 
                                 fullTranscript ?
