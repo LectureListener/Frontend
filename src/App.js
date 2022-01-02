@@ -11,10 +11,9 @@ function App() {
       <div className="app">
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<InputPage /> }/>
-            <Route path="/transcript" element={<TranscriptPage /> }/>
+            <Route path="/" element={<TranscriptPage/>}/>
+            <Route path="/input" element={<InputPage /> }/>
             <Route path="/menu" element={ <Buffer /> }/>
-            <Route path="/buffer" element={ <Buffer /> }/>
           </Routes>
         </BrowserRouter>
       </div>
