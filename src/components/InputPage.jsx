@@ -3,9 +3,9 @@ import logo from "../images/logo.png";
 const InputPage = (props) => {
     return (
         <div className="zindex-modal input-page d-flex vw-100 vh-100 flex-column align-items-center justify-content-start">
-            <img src={logo} className="w-25" title="lecture organizer" />
+            <img src={logo} className="w-25" title="lecture listener" />
                 <div>
-                <h1>LECTURE ORGANIZER</h1>
+                <h1>LECTURE LISTENER</h1>
                 <h3>You can upload video or audio file here</h3>
                 <form action="api.js" method="POST" enctype="multipart/form-data">
                 <input type="file" accept="audio/*, video/*" multiple />
