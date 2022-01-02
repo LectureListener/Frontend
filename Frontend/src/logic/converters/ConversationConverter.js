@@ -20,6 +20,12 @@ class ConversationConverter {
             return 
         this.topicAndQuestionConverter.convert(topics.topics, questions.questions, messages.messages)
     }
+
+    clear() {
+        this.messageConverter.messages = []
+        this.messageConverter.messagesById = {}
+        this.topicAndQuestionConverter.topicsAndQuestions = []
+    }
 }
 
 module.exports = ConversationConverter

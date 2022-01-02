@@ -118,13 +118,13 @@
   background-color: darkgrey!important;
 }
 
-.highlight {
+mark {
   padding: 0px!important;
   background-color: #fcf8e3;
 }
- 
+
 .btn{
-  background-color: darkgrey!important;
+  background-color: darkgrey;
 }
 
 .id-page, .error-page{

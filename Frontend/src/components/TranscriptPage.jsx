@@ -18,7 +18,7 @@ const TranscriptPage = (props) => {
     const onFileUpload = async (file) => {
         let conversation = null
 
-        setCurrentPage("load")
+        setCurrentPage("buffer")
 
         if (client.auth.accessToken === "") {
             await client.init({
@@ -34,6 +34,7 @@ const TranscriptPage = (props) => {
             conversation = await client.api.createConversationFromVideo(file, file.size)
         await conversation.jobs[0].waitForFinish()
 
+        conversationConverter.clear()
         await conversationConverter.convert(conversation)
         setCurrentTranscript(conversationConverter.messageConverter.messages)
         setCurrentTopicsAndQuestions(conversationConverter.topicAndQuestionConverter.topicsAndQuestions)
@@ -148,13 +149,11 @@ const TranscriptPage = (props) => {
             
             window.getSelection().removeAllRanges()
             changedMessages.forEach((element) => {
-                console.log(element)
                 const highlights = highlightConverter.messageConverter.messagesById[element.id].highlights
                 let text = element.textContent
                 for (let i = 0; i < highlights.length; i++) {
                     const range = highlights[i]
                     // add length of mark tags
-                    console.log(range)
                     text = text.substring(0, range[0]) + "<mark>" + text.substring(range[0], range[1]) + "</mark>" + text.substring(range[1]);
                 }
                 element.innerHTML = text
@@ -185,6 +184,7 @@ const TranscriptPage = (props) => {
                     <div className="caption-info w-75 d-flex flex-column">
                         <Toolbar highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null} onComment={() => toggleError(true)}></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
+<<<<<<< HEAD
                             { currentPage === 'transcript' ? 
                                 fullTranscript ?
                                 currentTranscript.map((section) => (
@@ -192,6 +192,22 @@ const TranscriptPage = (props) => {
                                 ))  
                             : "Highlighted stuff" // placeholder
                             : null                    
+=======
+                            {(() => { 
+                                if (fullTranscript) {
+                                    return currentTranscript.map((section) => (
+                                        <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/>
+                                    ))
+                                } else {
+                                    const sections = []
+                                    currentTranscript.forEach((section) => {
+                                        if (section.message.some((message) => message.highlights.length > 0))
+                                            sections.push( <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/> )
+                                    }) 
+                                    return sections
+                                }
+                            }) ()                
+>>>>>>> 36bb2b27cbb2b3060105e17a697c8b97f7f6b0a6
                             }
                         </div>
                     </div>
