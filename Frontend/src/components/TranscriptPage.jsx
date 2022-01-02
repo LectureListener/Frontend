@@ -4,6 +4,7 @@ import TranscriptSection from './templates/TranscriptSection';
 import TopicsSection from './templates/TopicsSection';
 import Toolbar from './templates/Toolbar';
 import Buffer from './Buffer';
+import LoadId from './templates/LoadId';
 import { useState, useEffect } from 'react';
 import logic from '../logic';
 import sdk from '../sdk'
@@ -46,9 +47,8 @@ const TranscriptPage = (props) => {
     }
 
     const backendUrl = "http://34.125.111.83:5000/"
-    const onLoad = async () => {
-        setCurrentPage("load")
-        
+    const onLoad = async () => { 
+        setCurrentPage("buffer")       
         const page = 0 // get page number somehow
         const res = await fetch(backendUrl + "transcription/" + page) 
         const json = await res.json()
@@ -114,7 +114,8 @@ const TranscriptPage = (props) => {
                         switch (currentPage) {
                             case 'transcript': return <audio id="audioPlayer" className="d-block mx-auto w-75" controls></audio>
                             case 'input': return <InputPage onFileUpload={onFileUpload}/>
-                            case 'load' : return <Buffer/>
+                            case 'load' : return <LoadId onLoad={onLoad}/>
+                            case 'buffer' : return <Buffer/>
                         }
                     }) ()
                     }
