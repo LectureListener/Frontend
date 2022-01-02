@@ -6,7 +6,7 @@ class HighlightConverter {
     }
 
     convert(selection) {
-        if (selection.type !== "Range")
+        if (selection.type !== "Range" || selection.rangeCount == 0)
             return
 
         for (let i = 0; i < selection.rangeCount; i++) {
@@ -18,6 +18,11 @@ class HighlightConverter {
 
             const startElement = startNode.parentElement
             const endElement = endNode.parentElement   
+            
+            const transcriptContainer = document.getElementsByClassName("transcription")[0]
+            // if there is highlighting out of the transcription
+            if (!transcriptContainer.contains(ancestor))
+                return
 
             // if the end node is part of the space at the end, we have to specially assign it an offset
             let endOffset = -1
@@ -32,11 +37,6 @@ class HighlightConverter {
                 startOffset = startElement.text.length - 1
             else
                 startOffset = range.startOffset
-
-            const transcriptContainer = document.getElementsByClassName("transcription")[0]
-            // if there is highlighting out of the transcription
-            if (!transcriptContainer.contains(ancestor))
-                return
 
             // get row of end and start nodes
             let startRowContainer = startElement
