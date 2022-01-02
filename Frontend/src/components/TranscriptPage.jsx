@@ -80,11 +80,13 @@ const TranscriptPage = (props) => {
                     <div className="caption-info w-75 d-flex flex-column">
                         <Toolbar isFullTranscript={fullTranscript} toggleTranscript={() => toggleFullTranscript(!fullTranscript)}></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
-                            { fullTranscript ?
+                            { !inputPage ? 
+                                fullTranscript ?
                                  exampleObject.map((section) => (
                                     <TranscriptSection skipAudio={skipAudio} timestamp={section.timestamp} message={section.message}/>
                                 ))  
-                            : "Highlighted stuff"                       
+                            : "Highlighted stuff"  
+                            : null                    
                             }
                         </div>
                     </div>
