@@ -12,7 +12,7 @@ class Job {
     onFinish(callback) {
         const wait = async () => {
             const { status } = await this.fetchStatus()
-            if (status == "completed")
+            if (status === "completed")
                 callback()
             else    
                 setTimeout(wait, 1000);

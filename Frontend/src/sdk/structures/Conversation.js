@@ -1,3 +1,5 @@
+const Job = require("./Job")
+
 class Conversation {
     constructor(conversationId, client, jobs=[]) {
         this.conversationId = conversationId

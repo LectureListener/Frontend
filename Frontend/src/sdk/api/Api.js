@@ -1,5 +1,4 @@
 const fetch = require("node-fetch")
-const { URL, URLSearchParams } = require("url")
 const ApiError = require("../errors/ApiError")
 const Conversation = require("../structures/Conversation")
 const Job = require("../structures/Job")
@@ -41,12 +40,12 @@ class Api {
     // TODO: make it easier to add params (maybe)
     async createConversationFromAudio(audio, streamLength = 0, params = {}) {
         const { conversationId, jobId } = await this.createConversationFromData(audio, "process/audio", "process/audio/url", "POST", streamLength, params)
-        return new Conversation(conversationId, this.client, [ new Job(jobId) ])
+        return new Conversation(conversationId, this.client, [ new Job(jobId, this.client) ])
     }
 
     async createConversationFromVideo(video, streamLength = 0, params = {}) {
         const { conversationId, jobId } = await this.createConversationFromData(video, "process/video", "process/video/url", "POST", streamLength, params)
-        return new Conversation(conversationId, this.client, [ new Job(jobId) ])
+        return new Conversation(conversationId, this.client, [ new Job(jobId, this.client) ])
     }
 
     async createConversationFromData(data, endpoint, urlEndpoint, method, streamLength = 0, params = {}) {
