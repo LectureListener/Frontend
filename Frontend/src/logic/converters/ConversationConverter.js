@@ -4,7 +4,7 @@ const TopicAndQuestionConverter = require("./TopicAndQuestionConverter")
 class ConversationConverter {
     constructor() {
         this.messageConverter = new MessageConverter()
-        this.topicConverter = new TopicAndQuestionConverter()
+        this.topicAndQuestionConverter = new TopicAndQuestionConverter()
     }
 
     async convert(conversation) {
@@ -18,7 +18,7 @@ class ConversationConverter {
 
         if (!topics || !questions)
             return 
-        this.topicConverter.convert(topics.topics, questions.questions, messages.messages)
+        this.topicAndQuestionConverter.convert(topics.topics, questions.questions, messages.messages)
     }
 }
 

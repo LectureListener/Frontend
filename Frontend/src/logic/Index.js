@@ -4,7 +4,7 @@
 exports.ConversationConverter = require("./converters/ConversationConverter")
 exports.HighlightConverter = require("./converters/HighlightConverter")
 exports.MessageConverter = require("./converters/MessageConverter")
-exports.TopicAndQuestionsConverter = require("./converters/TopicAndQuestionConverter")
+exports.TopicAndQuestionConverter = require("./converters/TopicAndQuestionConverter")
 
 // utils
 exports.ArrayUtils = require("./utils/ArrayUtils")

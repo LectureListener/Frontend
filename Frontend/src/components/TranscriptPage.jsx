@@ -32,7 +32,7 @@ const TranscriptPage = (props) => {
 
         conversationConverter.convert(conversation)
         setCurrentTranscript(conversationConverter.messageConverter.messages)
-        setCurrentTopicAndQuestions(conversationConverter.topicConverter.topicsAndQuestions)
+        setCurrentTopicsAndQuestions(conversationConverter.topicConverter.topicsAndQuestions)
         
         setFile(file)
     }
@@ -54,7 +54,7 @@ const TranscriptPage = (props) => {
         const json = await res.json()
 
         console.log(json.transcription)
-        setCurrentTopicAndQuestions(json.transcription.topicAndQuestions)
+        setCurrentTopicsAndQuestions(json.transcription.topicsAndQuestions)
         setCurrentTranscript(json.transcription.transcript)
     }
 
@@ -67,7 +67,7 @@ const TranscriptPage = (props) => {
             body: JSON.stringify({
                 transcription: JSON.stringify({
                     transcript: currentTranscript,
-                    topicsAndQuestions: currentTopicAndQuestions,
+                    topicsAndQuestions: currentTopicsAndQuestions,
                 })
             }),
             headers: {
@@ -79,7 +79,7 @@ const TranscriptPage = (props) => {
         console.log(page)
     }
 
-    const [currentTopicAndQuestions, setCurrentTopicAndQuestions] = useState([])
+    const [currentTopicsAndQuestions, setCurrentTopicsAndQuestions] = useState([])
 
     const [currentTranscript, setCurrentTranscript] = useState([])
 
@@ -88,6 +88,8 @@ const TranscriptPage = (props) => {
     const [currentTimestamp, setTimestamp] = useState(0);
     
     const [fullTranscript, toggleFullTranscript] = useState(true);
+
+    const [highlightToggle, toggleHighlight] = useState(false)
 
     const skipAudio = (timestamp) => {
         setTimestamp(parseInt(timestamp.split(':')[0] * 60) + parseInt(timestamp.split(':')[1]));
@@ -133,7 +135,7 @@ const TranscriptPage = (props) => {
                     </div>
                     <div className="topics w-25 mt-0 p-4 overflow-scroll">
                         <h4 className="text-center mb-3">Topics and Questions</h4>
-                        { currentTopicAndQuestions.map((section) => (
+                        { currentTopicsAndQuestions.map((section) => (
                             <TopicsSection skipAudio={skipAudio} topic={section}/>
                             ))
                         }
