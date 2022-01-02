@@ -6,7 +6,7 @@ const TopicsSection = (props) => {
                     {props.topic.timestamp}
                 </button>
             </time>
-            <div className="description mt-1">
+            <div className={`description mt-1 ${ props.topic.type === 'question' ? "fw-bold": ""}`} >
                 {props.topic.text}
             </div>
         </div>
