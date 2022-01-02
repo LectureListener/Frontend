@@ -99,7 +99,12 @@ const TranscriptPage = (props) => {
     const [errorToggle, toggleError] = useState(false);
 
     const skipAudio = (timestamp) => {
-        setTimestamp(parseInt(timestamp.split(':')[0] * 60) + parseInt(timestamp.split(':')[1]));
+        let timestampArgs = timestamp.split(":");
+        let numSecs = 0;
+        for (let i = 1; i <= timestampArgs.length; i++){
+            numSecs += parseInt(timestampArgs[timestampArgs.length - i]) * (Math.pow(60, i) / 60);
+        }
+        setTimestamp(numSecs);
     }
 
     useEffect(() => {
@@ -204,7 +209,7 @@ const TranscriptPage = (props) => {
                     <div className="topics w-25 mt-0 p-4 overflow-scroll">
                         <h4 className="text-center mb-3">Topics and Questions</h4>
                         { currentTopicsAndQuestions.map((section) => (
-                            <TopicsSection skipAudio={skipAudio} topic={section}/>
+                            <TopicsSection skipAudio={skipAudio} topic={section} currentPage={currentPage}/>
                             ))
                         }
                     </div>
