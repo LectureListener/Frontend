@@ -49,6 +49,39 @@
   justify-self: flex-start;
 }
 
+.newButton {
+  background-color: #050505; 
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.saveButton {
+  background-color: #4e4c4c; 
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.loadButton {
+  background-color: #999696; 
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
 .logo {
   width: 5em;
 }
@@ -60,7 +93,7 @@
   margin: 10px auto;
   border: 1px solid black;
 }
-/* 加载进度条框设置 */
+
 .bar span {
   display: block;
   width: 0px;
