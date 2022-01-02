@@ -6,11 +6,10 @@ class HighlightConverter {
     }
 
     convert(selection) {
-        if (selection.type !== "Range" || selection.rangeCount == 0)
+        if (selection.type !== "Range" || selection.rangeCount === 0)
             return null
 
         const changedElements = []
-        console.log(selection)
         for (let i = 0; i < selection.rangeCount; i++) {
             const range = selection.getRangeAt(i)
                 

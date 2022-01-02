@@ -114,20 +114,19 @@
   background-color: rgb(143, 143, 143)!important; 
 }
 
-<<<<<<< HEAD
 .btn-grey {
   background-color: darkgrey!important;
 }
 
-.highlight {
+mark {
   padding: 0px!important;
   background-color: #fcf8e3;
-=======
+}
+
 .btn{
-  background-color: darkgrey!important;
+  background-color: darkgrey;
 }
 
 .id-page{
   background-color: #f5f5f569 !important;
->>>>>>> deb56ac64f507ae4353fa6bc926e0ba82240dd1f
 }

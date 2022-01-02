@@ -19,7 +19,7 @@ const AppHeader = (props) => {
                     </button>
                 </div>
                 <div className="loadButton mx-2">
-                    <button className="btn text-white" type="button" onClick={() => props.changePage("load")} data-bs-toggle="modal" type="button" data-bs-target="#load-input">
+                    <button className="btn btn-grey text-white" type="button" onClick={() => props.changePage("load")} type="button" data-bs-target="#load-input">
                         <FontAwesomeIcon icon={faFolderOpen} />
                         <span className="ps-2">Load</span>
                     </button>
