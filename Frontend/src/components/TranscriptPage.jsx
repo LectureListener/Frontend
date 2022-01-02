@@ -62,7 +62,6 @@ const TranscriptPage = (props) => {
     }
 
     const onSave = async () => {
-        setCurrentPage('error');
 
         if (currentTranscript === 0)
             return
