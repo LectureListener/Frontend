@@ -4,11 +4,41 @@ from typing import List, Optional, Dict, Tuple
 from fastapi import FastAPI, File, UploadFile, Response, status
 from dotenv import load_dotenv
 import asyncio
+from fastapi.params import Depends
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, String, Integer
+from sqlalchemy.orm import sessionmaker
+from pydantic import BaseModel
 import aiohttp #type:ignore
-import nest_asyncio #type:ignore
+import nest_asyncio
+from sqlalchemy.orm.session import Session #type:ignore
 nest_asyncio.apply()
 
+DB_URL = 'sqlite:///./transcription.db'
+engine = create_engine(DB_URL, connect_args={'check_same_thread': False})
+
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+Base = declarative_base()
+
+class Transcription(Base):
+	__tablename__ = 'transcription'
+	id = Column(Integer, primary_key=True, nullable=False)
+	transciption = Column(String)
+
 app = FastAPI()
+
+Base.metadata.create_all(bind=engine)
+
+def getdb():
+	db = SessionLocal()
+	try:
+		yield db
+	finally:
+		db.close()
+
+class RequestTranscription(BaseModel):
+	transcription: str
 
 TOKEN_URL = "https://api.symbl.ai/oauth2/token:generate"
 VID_REQUEST_URL = "https://api.symbl.ai/v1/process/video"
@@ -34,6 +64,22 @@ def makeAuthHeader(token: str, fileExtension: str) -> Dict[str, str]:
 async def home():
     return {'response': 'success'}
 
+@app.post('/transcription', status_code=status.HTTP_201_CREATED)
+async def transcribe(request: RequestTranscription, db: Session = Depends(getdb)):
+    transcription = Transcription(transciption=request.transcription)
+    db.add(transcription)
+    db.commit()
+    db.refresh(transcription)
+    return {'response': 'success', 'page': db.query(Transcription).filter(request.transcription == Transcription.transciption).first().id}
+
+@app.get('/transcription/{page}', status_code=status.HTTP_200_OK)
+async def getTranscription(response: Response, page: int, db: Session = Depends(getdb)):
+    query = db.query(Transcription).filter(page == Transcription.id).first()
+    if query:
+        return {'response': query.transciption}
+    response.status_code = status.HTTP_404_NOT_FOUND
+    return {'response': 'No transcription found'}
+
 # Receive video file from client and get the file extension using fastapi
 @app.post("/upload", status_code=status.HTTP_201_CREATED)
 async def upload_file(response: Response, file: UploadFile = File(...)):
@@ -58,10 +104,13 @@ async def upload_file(response: Response, file: UploadFile = File(...)):
     jobId, conversationId = await uploadFile(fileDataInBytes, fileHeader, fileExtension)
     print("Uploaded file to Symbl.ai")
 
+    index = 0
     #Check if the file has been processed, If not sleep for 1 seconds and check again
     while await IsFileProcessedCompleted(jobId, fileHeader) is False:
-        print(f"File {jobId} is not processed yet")
+        print(f"File {jobId} is not processed yet: {index} seconds", end='\r')
+        index += 1
         await asyncio.sleep(1)
+    print(f"File {jobId} is processed NOW")
 
     #Get the transcription result
     transcriptionResult = await getTranscriptionResult(conversationId, fileHeader)
@@ -81,7 +130,7 @@ async def getToken() -> str:
         API_ID = os.getenv('API_ID')
         API_SECRET = os.getenv('API_KEY')
     except Exception as e:
-        print(f"Fetching KEY from .env file failed: {e}")
+        print(f"Fetching KEY from .env file failed: {e}\n Please add Symbl.AI API_ID and API_KEY(API_SECRET) to .env file")
         load_dotenv()
         API_ID = os.getenv('API_ID')
         API_SECRET = os.getenv('API_KEY')
@@ -128,7 +177,7 @@ async def getTranscriptionResult(conversationId: str, fileHeader: Dict[str, str]
         async with session.get(f"https://api.symbl.ai/v1/conversations/{conversationId}/messages", headers=fileHeader) as response:
             resp = await response.json()
             jsonMessageList = resp['messages']
-            return list(map(lambda jsonMessage: jsonMessage['text'], jsonMessageList))
+            return ''.join(list(map(lambda jsonMessage: jsonMessage['text'] + " ", jsonMessageList)))
 
 def isAudioOrVideo(fileExtension: str) -> str:
     if fileExtension in ['mp4', 'mov', 'avi']:

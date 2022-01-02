@@ -63,7 +63,6 @@ const TranscriptPage = (props) => {
         document.getElementById("audioplayer").currentTime = currentTimestamp;
     }, [currentTimestamp]);
 
-
     return (
         <div className="container-fluid vw-100 vh-100">
             <AppHeader currentPage={currentPage} changePage={setCurrentPage}></AppHeader>
@@ -94,11 +93,10 @@ const TranscriptPage = (props) => {
                         </div>
                     </div>
                     <div className="topics w-25 mt-0 p-4 overflow-scroll">
-                        <h2>Topics and Questions</h2>
+                        <h4 className="text-center mb-3">Topics and Questions</h4>
                         { exampleTopics.map((section) => (
                             <TopicsSection skipAudio={skipAudio} topic={section}/>
-                        ))
-
+                            ))
                         }
                     </div>
                 </div>
