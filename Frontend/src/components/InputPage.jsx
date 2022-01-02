@@ -22,7 +22,7 @@ const InputPage = (props) => {
                 <FontAwesomeIcon icon={faUpload}></FontAwesomeIcon>
                 <span className="ps-2">Upload</span>
             </button>
-            <input className="d-none" type="file" id="upload" onInput={onUpdate.bind(this)} ref={fileInput} accept="audio/wav, audio/mpeg, audio/mp3, audio/wav, video/mp4" />
+            <input className="d-none" type="file" id="upload" onInput={onUpdate.bind(this)} ref={fileInput} accept="audio/wav, audio/mpeg, audio/mp3, audio/wav" />
         </div>
     )
 }
