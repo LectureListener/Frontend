@@ -96,6 +96,8 @@ const TranscriptPage = (props) => {
 
     const [highlightToggle, toggleHighlight] = useState(false)
 
+    const [eraseToggle, toggleErase] = useState(false)
+
     const skipAudio = (timestamp) => {
         setTimestamp(parseInt(timestamp.split(':')[0] * 60) + parseInt(timestamp.split(':')[1]));
     }
@@ -120,16 +122,33 @@ const TranscriptPage = (props) => {
             }
         }
 
-        const button = document.getElementById("highlightButton")
-        if (highlightToggle) {
-            button.style.backgroundColor = "rgb(167, 58, 63)"
+        if (highlightToggle || eraseToggle) {
             // disable dragging, and turn a tags into regular text
             appStylesheet.insertRule("a { pointer-events: none; cursor: default; user-drag: none; -webkit-user-drag: none; }", 1)
         } else {
-            button.style.backgroundColor = "darkgrey"
             appStylesheet.deleteRule(1)
         }
+    }, [highlightToggle, eraseToggle])
+
+    useEffect(() => {
+        const button = document.getElementById("highlightButton")
+        if (highlightToggle) {
+            toggleErase(false)
+            button.style.backgroundColor = "rgb(167, 58, 63)"
+        } else {
+            button.style.backgroundColor = "darkgrey"
+        }
     }, [highlightToggle])
+
+    useEffect(() => {
+        const button = document.getElementById("eraseButton")
+        if (eraseToggle) {
+            toggleHighlight(false)
+            button.style.backgroundColor = "rgb(167, 58, 63)"
+        } else {
+            button.style.backgroundColor = "darkgrey"
+        }
+    }, [eraseToggle])
 
     useEffect(() => {
         window.addEventListener("beforeunload", (event) => {
@@ -141,17 +160,19 @@ const TranscriptPage = (props) => {
         }) 
 
         const parseHighlight = () => {
-            const changedMessages = highlightConverter.convert(window.getSelection())
-            if (changedMessages == null)
+            if (!highlightToggle && !eraseToggle)
                 return
-            
+
+            const changedMessages = highlightConverter.convert(window.getSelection(), eraseToggle)
+            if (changedMessages === null)
+                return
+
             window.getSelection().removeAllRanges()
             changedMessages.forEach((element) => {
                 const highlights = highlightConverter.messageConverter.messagesById[element.id].highlights
                 let text = element.textContent
                 for (let i = 0; i < highlights.length; i++) {
                     const range = highlights[i]
-                    // add length of mark tags
                     text = text.substring(0, range[0]) + "<mark>" + text.substring(range[0], range[1]) + "</mark>" + text.substring(range[1]);
                 }
                 element.innerHTML = text
@@ -180,7 +201,7 @@ const TranscriptPage = (props) => {
                 </div>
                 <div className="info w-100 d-flex justify-content-between align-items-start">
                     <div className="caption-info w-75 d-flex flex-column">
-                        <Toolbar highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null}></Toolbar>
+                        <Toolbar eraseToggle={eraseToggle} toggleErase={toggleErase} highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null}></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
                             {(() => { 
                                 if (fullTranscript) {
