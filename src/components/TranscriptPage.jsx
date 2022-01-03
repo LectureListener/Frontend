@@ -61,11 +61,12 @@ const TranscriptPage = (props) => {
             setCurrentPage("buffer")      
             const page = document.getElementById("load-number").value; // get page number somehow
             const res = await fetch(backendUrl + "transcription/" + page) 
-            const json = await res.json()
+            const jsonRes = await res.json()
+            const json = JSON.parse(jsonRes.response)
 
-            console.log(json.transcription)
-            setCurrentTopicsAndQuestions(json.transcription.topicsAndQuestions)
-            setCurrentTranscript(json.transcription.transcript)
+            console.log(json)
+            setCurrentTopicsAndQuestions(json.topicsAndQuestions)
+            setCurrentTranscript(json.transcript)
             setCurrentPage('transcript');           
         } catch(error) {
             console.log(error)
