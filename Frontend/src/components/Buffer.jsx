@@ -9,11 +9,7 @@ const Buffer = () => {
                 <div className="shadow">
                 </div>
                 <div className="load d-flex justify-content-center">
-                    <p>Loading</p>
-                </div>
-                <div className="bar">
-                    <span id="j"></span>
-                    <div id="num">0%</div>
+                    <p>Loading... (this may take a long time)</p>
                 </div>
             </div>
         </div>           

@@ -120,7 +120,12 @@ body {
 
 mark {
   padding: 0px!important;
-  background-color: #fff1ac;
+  background-color: #ffec90;
+}
+
+mark:hover {
+  background-color: #ffe252;
+  border-radius: 0.3em;
 }
 
 .btn{
