@@ -106,8 +106,6 @@ const TranscriptPage = (props) => {
     const [currentTopicsAndQuestions, setCurrentTopicsAndQuestions] = useState([])
 
     const [currentTranscript, setCurrentTranscript] = useState([])
-
-    const [currentPage, setCurrentPage] = useState("input");
   
     const [currentTimestamp, setTimestamp] = useState(0);
     
@@ -119,6 +117,8 @@ const TranscriptPage = (props) => {
     const [errorToggle, toggleError] = useState(false);
 
     const [pageNumber, setPageNumber] = useState(0);
+
+    const [currentPage, setCurrentPage] = useState("input");
 
     const skipAudio = (timestamp) => {
         let timestampArgs = timestamp.split(":");
@@ -137,6 +137,7 @@ const TranscriptPage = (props) => {
     }, [currentTimestamp]);
 
     useEffect(() => {
+        if (currentPage === 'input') return
         setCurrentPage("transcript")
     }, [fullTranscript])
 
