@@ -48,12 +48,20 @@ class TopicAndQuestionConverter {
         let lastTopicOrQuestion = { text: "" }
         sortedArray.forEach((topicOrQuestion) => {
             if (topicOrQuestion.text !== lastTopicOrQuestion.text) {
-                const topicOrQuestionObject = {
-                    type: topicOrQuestion.type,
-                    text: topicOrQuestion.text,
-                    timestamp: DateFormatter.toMinutesAndHours(new Date(topicOrQuestion.timestamp))
+                if (lastTopicOrQuestion.timestamp === topicOrQuestion.timestamp && lastTopicOrQuestion.type === topicOrQuestion.type) {
+                    const lastObject = this.topicsAndQuestions[this.topicsAndQuestions.length - 1]
+                    lastObject.text += ", " + topicOrQuestion.text
+                    
+                    if (this.topicsAndQuestions.length > 1 && this.topicsAndQuestions[this.topicsAndQuestions.length - 2].text === lastObject.text)
+                        this.topicsAndQuestions.splice(this.topicsAndQuestions.length - 1, 1)
+                } else {
+                    const topicOrQuestionObject = {
+                        type: topicOrQuestion.type,
+                        text: topicOrQuestion.text.charAt(0).toUpperCase() + topicOrQuestion.text.slice(1),
+                        timestamp: DateFormatter.toMinutesAndHours(new Date(topicOrQuestion.timestamp))
+                    }
+                    this.topicsAndQuestions.push(topicOrQuestionObject)
                 }
-                this.topicsAndQuestions.push(topicOrQuestionObject)
             }
             lastTopicOrQuestion = topicOrQuestion
         })
