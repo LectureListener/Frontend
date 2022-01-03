@@ -1,5 +1,9 @@
 Pre-requisite
-Install docker
+1. Install docker
+2. Get Symbl API ID, API Secret
+
+### .env Configuration
+Insert Symbl API key inside `Backend/app/.env` file
 
 ### How to deploy
 1. Goto PATH `~/DirectoryWhereYouInstalledLectureListener/LectureListener/Backend`
