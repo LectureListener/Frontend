@@ -91,7 +91,7 @@ const TranscriptPage = (props) => {
 
     const [currentTranscript, setCurrentTranscript] = useState([])
 
-    const [currentPage, setCurrentPage] = useState("transcript");
+    const [currentPage, setCurrentPage] = useState("input");
   
     const [currentTimestamp, setTimestamp] = useState(0);
     
@@ -114,6 +114,7 @@ const TranscriptPage = (props) => {
     }
 
     useEffect(() => {
+        if (currentPage !== 'transcript') return
         const audioPlayer = document.getElementById("audioPlayer")
         audioPlayer.currentTime = currentTimestamp;
         audioPlayer.play()
