@@ -186,7 +186,7 @@ const TranscriptPage = (props) => {
                             case 'input': return <InputPage onFileUpload={onFileUpload}/>
                             case 'load' : return <LoadId onLoad={onLoad}/>
                             case 'buffer' : return <Buffer/>
-                            case 'save' : return <h3 className="text-secondary">Your page number is {pageNumber}</h3>
+                            case 'save' : return <h3 className="text-secondary text-center fw-bold">Your page number is {pageNumber}</h3>
                         }
                     }) ()
                     }
