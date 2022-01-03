@@ -53,20 +53,21 @@ const TranscriptPage = (props) => {
     const backendUrl = "http://34.125.111.83:5000/"
     const onLoad = async () => { 
         setCurrentPage("buffer")       
-        const page = 0 // get page number somehow
+        const page = document.getElementById("load-number").value; // get page number somehow
         const res = await fetch(backendUrl + "transcription/" + page) 
         const json = await res.json()
 
         console.log(json.transcription)
         setCurrentTopicsAndQuestions(json.transcription.topicsAndQuestions)
         setCurrentTranscript(json.transcription.transcript)
+        setCurrentPage('transcript');
     }
 
     const onSave = async () => {
 
         if (currentTranscript === 0)
             return
-
+        setCurrentPage('buffer')
         const options = {
             method: "POST",
             body: JSON.stringify({
@@ -82,6 +83,8 @@ const TranscriptPage = (props) => {
         const res = await fetch(backendUrl + "transcription", options)
         const { page } = await res.json()
         console.log(page)
+        setCurrentPage('save')
+        setPageNumber(page)
     }
 
     const [currentTopicsAndQuestions, setCurrentTopicsAndQuestions] = useState([])
@@ -97,9 +100,17 @@ const TranscriptPage = (props) => {
     const [highlightToggle, toggleHighlight] = useState(false)
 
     const [eraseToggle, toggleErase] = useState(false)
+    const [errorToggle, toggleError] = useState(false);
+
+    const [pageNumber, setPageNumber] = useState(0);
 
     const skipAudio = (timestamp) => {
-        setTimestamp(parseInt(timestamp.split(':')[0] * 60) + parseInt(timestamp.split(':')[1]));
+        let timestampArgs = timestamp.split(":");
+        let numSecs = 0;
+        for (let i = 1; i <= timestampArgs.length; i++){
+            numSecs += parseInt(timestampArgs[timestampArgs.length - i]) * (Math.pow(60, i - 1));
+        }
+        setTimestamp(numSecs);
     }
 
     useEffect(() => {
@@ -185,6 +196,7 @@ const TranscriptPage = (props) => {
 
     return (
         <div className="container-fluid vw-100 vh-100">
+            {errorToggle ? <Error onClose={toggleError} /> : null }
             <AppHeader currentPage={currentPage} changePage={setCurrentPage} onSave={onSave} onLoad={onLoad}></AppHeader>
             <div className="interface d-flex flex-column">
                 <div className="playbar h-25 py-4">
@@ -193,15 +205,15 @@ const TranscriptPage = (props) => {
                             case 'transcript': return <audio id="audioPlayer" className="d-block mx-auto w-75" controls></audio>
                             case 'input': return <InputPage onFileUpload={onFileUpload}/>
                             case 'load' : return <LoadId onLoad={onLoad}/>
-                            case 'error': return <Error onClose={setCurrentPage}/>
                             case 'buffer' : return <Buffer/>
+                            case 'save' : return <h3 className="text-secondary text-center fw-bold">Your page number is {pageNumber}</h3>
                         }
                     }) ()
                     }
                 </div>
                 <div className="info w-100 d-flex justify-content-between align-items-start">
                     <div className="caption-info w-75 d-flex flex-column">
-                        <Toolbar eraseToggle={eraseToggle} toggleErase={toggleErase} highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null}></Toolbar>
+                        <Toolbar eraseToggle={eraseToggle} toggleErase={toggleErase} highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null} onComment={() => toggleError(true)}></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
                             {(() => { 
                                 if (fullTranscript) {
@@ -223,7 +235,7 @@ const TranscriptPage = (props) => {
                     <div className="topics w-25 mt-0 p-4 overflow-scroll">
                         <h4 className="text-center mb-3">Topics and Questions</h4>
                         { currentTopicsAndQuestions.map((section) => (
-                            <TopicsSection skipAudio={skipAudio} topic={section}/>
+                            <TopicsSection skipAudio={skipAudio} topic={section} currentPage={currentPage}/>
                             ))
                         }
                     </div>
