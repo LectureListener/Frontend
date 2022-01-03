@@ -55,7 +55,7 @@ const TranscriptPage = (props) => {
         audio.src = URL.createObjectURL(file)
     }
 
-    const backendUrl = "http://34.125.111.83:5000/"
+    const backendUrl = "https://lecture-listener.herokuapp.com/"
     const onLoad = async () => { 
         try {
             setCurrentPage("buffer")      
