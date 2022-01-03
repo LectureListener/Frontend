@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/LectureListener/static/css/main.17a11821.css",
+    "main.js": "/LectureListener/static/js/main.44baef8a.js",
+    "static/js/787.f27fdb8a.chunk.js": "/LectureListener/static/js/787.f27fdb8a.chunk.js",
+    "static/media/logo.png": "/LectureListener/static/media/logo.ba870e741007dd0caee8.png",
+    "index.html": "/LectureListener/index.html",
+    "main.17a11821.css.map": "/LectureListener/static/css/main.17a11821.css.map",
+    "main.44baef8a.js.map": "/LectureListener/static/js/main.44baef8a.js.map",
+    "787.f27fdb8a.chunk.js.map": "/LectureListener/static/js/787.f27fdb8a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.17a11821.css",
+    "static/js/main.44baef8a.js"
+  ]
+}
