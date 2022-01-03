@@ -53,20 +53,21 @@ const TranscriptPage = (props) => {
     const backendUrl = "http://34.125.111.83:5000/"
     const onLoad = async () => { 
         setCurrentPage("buffer")       
-        const page = 0 // get page number somehow
+        const page = document.getElementById("load-number").value; // get page number somehow
         const res = await fetch(backendUrl + "transcription/" + page) 
         const json = await res.json()
 
         console.log(json.transcription)
         setCurrentTopicsAndQuestions(json.transcription.topicsAndQuestions)
         setCurrentTranscript(json.transcription.transcript)
+        setCurrentPage('transcript');
     }
 
     const onSave = async () => {
 
         if (currentTranscript === 0)
             return
-
+        setCurrentPage('buffer')
         const options = {
             method: "POST",
             body: JSON.stringify({
@@ -82,6 +83,8 @@ const TranscriptPage = (props) => {
         const res = await fetch(backendUrl + "transcription", options)
         const { page } = await res.json()
         console.log(page)
+        setCurrentPage('save')
+        setPageNumber(page)
     }
 
     const [currentTopicsAndQuestions, setCurrentTopicsAndQuestions] = useState([])
@@ -97,6 +100,8 @@ const TranscriptPage = (props) => {
     const [highlightToggle, toggleHighlight] = useState(false)
 
     const [errorToggle, toggleError] = useState(false);
+
+    const [pageNumber, setPageNumber] = useState(0);
 
     const skipAudio = (timestamp) => {
         let timestampArgs = timestamp.split(":");
@@ -181,6 +186,7 @@ const TranscriptPage = (props) => {
                             case 'input': return <InputPage onFileUpload={onFileUpload}/>
                             case 'load' : return <LoadId onLoad={onLoad}/>
                             case 'buffer' : return <Buffer/>
+                            case 'save' : return <h3 className="text-secondary">Your page number is {pageNumber}</h3>
                         }
                     }) ()
                     }
