@@ -28,10 +28,16 @@ const TranscriptPage = (props) => {
             })
         }
 
-        if (file.type.startsWith("audio"))
-            conversation = await client.api.createConversationFromAudio(file, file.size)
-        else
-            conversation = await client.api.createConversationFromVideo(file, file.size)
+        try {
+            if (file.type.startsWith("audio"))
+                conversation = await client.api.createConversationFromAudio(file, file.size)
+            else
+                conversation = await client.api.createConversationFromVideo(file, file.size)
+        } catch(error) {
+            console.log(error)
+            toggleError(true)
+        }
+
         await conversation.jobs[0].waitForFinish()
 
         conversationConverter.clear()
@@ -52,39 +58,49 @@ const TranscriptPage = (props) => {
 
     const backendUrl = "http://34.125.111.83:5000/"
     const onLoad = async () => { 
-        setCurrentPage("buffer")       
-        const page = document.getElementById("load-number").value; // get page number somehow
-        const res = await fetch(backendUrl + "transcription/" + page) 
-        const json = await res.json()
+        try {
+            setCurrentPage("buffer")      
+            const page = document.getElementById("load-number").value; // get page number somehow
+            const res = await fetch(backendUrl + "transcription/" + page) 
+            const json = await res.json()
 
-        console.log(json.transcription)
-        setCurrentTopicsAndQuestions(json.transcription.topicsAndQuestions)
-        setCurrentTranscript(json.transcription.transcript)
-        setCurrentPage('transcript');
+            console.log(json.transcription)
+            setCurrentTopicsAndQuestions(json.transcription.topicsAndQuestions)
+            setCurrentTranscript(json.transcription.transcript)
+            setCurrentPage('transcript');           
+        } catch(error) {
+            console.log(error)
+            toggleError(true)
+        }
     }
 
     const onSave = async () => {
 
         if (currentTranscript === 0)
             return
-        setCurrentPage('buffer')
-        const options = {
-            method: "POST",
-            body: JSON.stringify({
-                transcription: JSON.stringify({
-                    transcript: currentTranscript,
-                    topicsAndQuestions: currentTopicsAndQuestions,
-                })
-            }),
-            headers: {
-                "Content-Type": "application/json"
-            },
+        try {
+            setCurrentPage('buffer')
+            const options = {
+                method: "POST",
+                body: JSON.stringify({
+                    transcription: JSON.stringify({
+                        transcript: currentTranscript,
+                        topicsAndQuestions: currentTopicsAndQuestions,
+                    })
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            }
+            const res = await fetch(backendUrl + "transcription", options)
+            const { page } = await res.json()
+            console.log(page)
+            setCurrentPage('save')
+            setPageNumber(page)            
+        } catch(error) {
+            console.log(error)
+            toggleError(true)
         }
-        const res = await fetch(backendUrl + "transcription", options)
-        const { page } = await res.json()
-        console.log(page)
-        setCurrentPage('save')
-        setPageNumber(page)
     }
 
     const [currentTopicsAndQuestions, setCurrentTopicsAndQuestions] = useState([])
@@ -121,7 +137,7 @@ const TranscriptPage = (props) => {
     }, [currentTimestamp]);
 
     useEffect(() => {
-
+        setCurrentPage("transcript")
     }, [fullTranscript])
 
     useEffect(() => {
@@ -136,9 +152,11 @@ const TranscriptPage = (props) => {
 
         if (highlightToggle || eraseToggle) {
             // disable dragging, and turn a tags into regular text
-            appStylesheet.insertRule("a { pointer-events: none; cursor: default; user-drag: none; -webkit-user-drag: none; }", 1)
+            if (appStylesheet.cssRules.item(1).selectorText !== "a")
+                appStylesheet.insertRule("a { pointer-events: none; cursor: default; user-drag: none; -webkit-user-drag: none; }", 1)
         } else {
-            appStylesheet.deleteRule(1)
+            if (appStylesheet.cssRules.item(1).selectorText === "a")
+                appStylesheet.deleteRule(1)
         }
     }, [highlightToggle, eraseToggle])
 
@@ -214,7 +232,7 @@ const TranscriptPage = (props) => {
                 </div>
                 <div className="info w-100 d-flex justify-content-between align-items-start">
                     <div className="caption-info w-75 d-flex flex-column">
-                        <Toolbar eraseToggle={eraseToggle} toggleErase={toggleErase} highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => currentPage === 'transcript' ? toggleFullTranscript(!fullTranscript) : null} onComment={() => toggleError(true)}></Toolbar>
+                        <Toolbar eraseToggle={eraseToggle} toggleErase={toggleErase} highlightToggle={highlightToggle} toggleHighlight={toggleHighlight} isFullTranscript={fullTranscript} currentPage={currentPage} toggleTranscript={() => toggleFullTranscript(!fullTranscript)} onComment={() => toggleError(true)}></Toolbar>
                         <div className="transcription p-4 d-block d-flex flex-column overflow-scroll">
                             {(() => { 
                                 if (fullTranscript) {
