@@ -31,4 +31,4 @@ class Job {
     }
 }
 
-module.exports = Job
+export default Job

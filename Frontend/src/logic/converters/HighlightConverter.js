@@ -1,4 +1,4 @@
-const ArrayUtils = require("../utils/ArrayUtils")
+import ArrayUtils from "../utils/ArrayUtils"
 
 class HighlightConverter {
     constructor(messageConverter) {
@@ -155,4 +155,4 @@ class HighlightConverter {
     }
 }
 
-module.exports = HighlightConverter
+export default HighlightConverter

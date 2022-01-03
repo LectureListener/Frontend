@@ -1,4 +1,4 @@
-const fetch = require("node-fetch")
+import fetch from "node-fetch"
 
 class Auth {
     constructor(client) {
@@ -33,4 +33,4 @@ class Auth {
     }
 }
 
-module.exports = Auth
+export default Auth

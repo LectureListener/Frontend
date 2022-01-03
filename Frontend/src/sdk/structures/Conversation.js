@@ -1,4 +1,4 @@
-const Job = require("./Job")
+import Job from "./Job"
 
 class Conversation {
     constructor(conversationId, client, jobs=[]) {
@@ -58,4 +58,4 @@ class Conversation {
     }
 }
 
-module.exports = Conversation
+export default Conversation

@@ -1,5 +1,5 @@
-const Api = require("./api/Api")
-const Auth = require("./api/Auth")
+import Api from "./api/Api"
+import Auth from "./api/Auth"
 
 class Client {
     constructor () {
@@ -14,4 +14,4 @@ class Client {
     }
 }
 
-module.exports = Client
+export default Client

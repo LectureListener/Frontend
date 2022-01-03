@@ -1,5 +1,5 @@
-const MessageConverter = require("./MessageConverter")
-const TopicAndQuestionConverter = require("./TopicAndQuestionConverter")
+import MessageConverter from "./MessageConverter"
+import TopicAndQuestionConverter from "./TopicAndQuestionConverter"
 
 class ConversationConverter {
     constructor() {
@@ -28,4 +28,4 @@ class ConversationConverter {
     }
 }
 
-module.exports = ConversationConverter
+export default ConversationConverter

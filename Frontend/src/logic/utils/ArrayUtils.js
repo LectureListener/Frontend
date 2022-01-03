@@ -54,4 +54,4 @@ class ArrayUtils {
     }
 }
 
-module.exports = ArrayUtils
+export default ArrayUtils

@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&display=swap');
 
-/* this is just here so i can easily identify this sheet in js*/
-#identifier {}
-
 #root {
   width: 100%;
   height: 100%;

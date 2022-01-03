@@ -1,7 +1,7 @@
-const fetch = require("node-fetch")
-const ApiError = require("../errors/ApiError")
-const Conversation = require("../structures/Conversation")
-const Job = require("../structures/Job")
+import fetch from "node-fetch"
+import ApiError from "../errors/ApiError"
+import Conversation from "../structures/Conversation"
+import Job from "../structures/Job"
 const apiURL = "https://api.symbl.ai/"
 const apiVersion = "v1/"
 
@@ -71,4 +71,4 @@ class Api {
     }
 }
 
-module.exports = Api
+export default Api

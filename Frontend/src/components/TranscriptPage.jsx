@@ -6,22 +6,21 @@ import Toolbar from './templates/Toolbar';
 import Buffer from './Buffer';
 import LoadId from './templates/LoadId';
 import Error from './templates/Error';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import logic from '../logic';
 import sdk from '../sdk'
 
-const client = new sdk.Client()
-const conversationConverter = new logic.ConversationConverter()
-const highlightConverter =  new logic.HighlightConverter(conversationConverter.messageConverter)
-
 const TranscriptPage = (props) => {
+    const client = useRef(new sdk.Client())
+    const conversationConverter = useRef(new logic.ConversationConverter())
+    const highlightConverter = useRef(new logic.HighlightConverter(conversationConverter.current.messageConverter))
     const onFileUpload = async (file) => {
         let conversation = null
-
+        
         setCurrentPage("buffer")
 
-        if (client.auth.accessToken === "") {
-            await client.init({
+        if (client.current.auth.accessToken === "") {
+            await client.current.init({
                 appId: "554d7a6d71387749336f69344c327671734d62553169663231635245394c3849",
                 // i swear i know what secret means my finger just slipped
                 appSecret: "666e76544141647162717a76733267765536767333725545424967434b6e47663767466a3642676467764545537a386c5446584b4f58553778694263592d5546"
@@ -30,9 +29,9 @@ const TranscriptPage = (props) => {
 
         try {
             if (file.type.startsWith("audio"))
-                conversation = await client.api.createConversationFromAudio(file, file.size)
+                conversation = await client.current.api.createConversationFromAudio(file, file.size)
             else
-                conversation = await client.api.createConversationFromVideo(file, file.size)
+                conversation = await client.current.api.createConversationFromVideo(file, file.size)
         } catch(error) {
             console.log(error)
             toggleError(true)
@@ -40,10 +39,10 @@ const TranscriptPage = (props) => {
 
         await conversation.jobs[0].waitForFinish()
 
-        conversationConverter.clear()
-        await conversationConverter.convert(conversation)
-        setCurrentTranscript(conversationConverter.messageConverter.messages)
-        setCurrentTopicsAndQuestions(conversationConverter.topicAndQuestionConverter.topicsAndQuestions)
+        conversationConverter.current.clear()
+        await conversationConverter.current.convert(conversation)
+        setCurrentTranscript(conversationConverter.current.messageConverter.messages)
+        setCurrentTopicsAndQuestions(conversationConverter.current.topicAndQuestionConverter.topicsAndQuestions)
         
         setFile(file)
     }
@@ -141,23 +140,21 @@ const TranscriptPage = (props) => {
         setCurrentPage("transcript")
     }, [fullTranscript])
 
+    const appStylesheet = useRef(null)
     useEffect(() => {
-        let appStylesheet = null
-        for (let i = 0; i < document.styleSheets.length; i++) {
-            const sheet = document.styleSheets.item(i)
-            if (sheet.cssRules.length > 0 && sheet.cssRules.item(0).cssText.startsWith("#identifier")) {
-                appStylesheet = sheet
-                break                
-            }
+        if (appStylesheet.current === null) {
+            const style = document.createElement("style");
+            document.head.appendChild(style); 
+            appStylesheet.current = style.sheet;
         }
 
         if (highlightToggle || eraseToggle) {
             // disable dragging, and turn a tags into regular text
-            if (appStylesheet.cssRules.item(1).selectorText !== "a")
-                appStylesheet.insertRule("a { pointer-events: none; cursor: default; user-drag: none; -webkit-user-drag: none; }", 1)
+            if (appStylesheet.current.cssRules.item(0) === null)
+                appStylesheet.current.insertRule("a { pointer-events: none; cursor: default; user-drag: none; -webkit-user-drag: none; }")
         } else {
-            if (appStylesheet.cssRules.item(1).selectorText === "a")
-                appStylesheet.deleteRule(1)
+            if (appStylesheet.current.cssRules.item(0) !== null && appStylesheet.current.cssRules.item(0).selectorText === "a")
+                appStylesheet.current.deleteRule(0)
         }
     }, [highlightToggle, eraseToggle])
 
@@ -194,13 +191,13 @@ const TranscriptPage = (props) => {
             if (!highlightToggle && !eraseToggle)
                 return
 
-            const changedMessages = highlightConverter.convert(window.getSelection(), eraseToggle)
+            const changedMessages = highlightConverter.current.convert(window.getSelection(), eraseToggle)
             if (changedMessages === null)
                 return
 
             window.getSelection().removeAllRanges()
             changedMessages.forEach((element) => {
-                const highlights = highlightConverter.messageConverter.messagesById[element.id].highlights
+                const highlights = highlightConverter.current.messageConverter.messagesById[element.id].highlights
                 let text = element.textContent
                 for (let i = 0; i < highlights.length; i++) {
                     const range = highlights[i]

@@ -8,4 +8,4 @@ class DateFormatter {
     }
 }
 
-module.exports = DateFormatter
+export default DateFormatter

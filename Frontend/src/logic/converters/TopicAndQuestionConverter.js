@@ -1,4 +1,4 @@
-const DateFormatter = require("../utils/DateFormatter")
+import DateFormatter from "../utils/DateFormatter"
 
 class TopicAndQuestionConverter {
     constructor() {
@@ -68,4 +68,4 @@ class TopicAndQuestionConverter {
     }
 }
 
-module.exports = TopicAndQuestionConverter
+export default TopicAndQuestionConverter

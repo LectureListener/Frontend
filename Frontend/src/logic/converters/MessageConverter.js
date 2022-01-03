@@ -1,4 +1,4 @@
-const DateFormatter = require("../utils/DateFormatter")
+import DateFormatter from "../utils/DateFormatter"
 
 const maxMessageLength = 20
 
@@ -51,4 +51,4 @@ class MessageConverter {
     }
 }
 
-module.exports = MessageConverter
+export default MessageConverter
